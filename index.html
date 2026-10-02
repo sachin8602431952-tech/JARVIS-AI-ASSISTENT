@@ -1,0 +1,2655 @@
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>ROBERT · Personal AI Assistant</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ROBERT — Design system
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#03060c;
+  --glass:rgba(9,17,29,.72);
+  --glass-2:rgba(13,23,38,.88);
+  --line:rgba(0,229,255,.14);
+  --line-2:rgba(120,160,200,.12);
+  --cyan:#00e5ff;
+  --cyan-dim:#0a7d94;
+  --violet:#7c5cff;
+  --green:#22e0a1;
+  --amber:#ffb84d;
+  --red:#ff5f7a;
+  --text:#d8e7f6;
+  --muted:#7d94ad;
+  --dim:#4a5f76;
+  --r:14px;
+}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  font-size:14px;
+  line-height:1.5;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 620px at 50% -12%, rgba(0,229,255,.11), transparent 62%),
+    radial-gradient(720px 520px at 102% 104%, rgba(124,92,255,.11), transparent 62%),
+    radial-gradient(620px 520px at -6% 100%, rgba(0,229,255,.07), transparent 62%);
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:
+    linear-gradient(rgba(0,229,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,.035) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(circle at 50% 38%, #000, transparent 88%);
+  mask-image:radial-gradient(circle at 50% 38%, #000, transparent 88%);
+}
+body.dim{filter:brightness(.62) saturate(.85)}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,229,255,.16);border-radius:8px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,229,255,.3)}
+
+/* ---------- App shell ---------- */
+.app{position:relative;z-index:1;display:flex;flex-direction:column;height:100dvh;height:100vh}
+
+.topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:10px 16px;
+  border-bottom:1px solid var(--line-2);
+  background:linear-gradient(180deg, rgba(8,15,26,.94), rgba(8,15,26,.55));
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  flex-shrink:0;
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.logo-mark{
+  width:36px;height:36px;border-radius:11px;flex-shrink:0;
+  display:grid;place-items:center;
+  font-family:'Orbitron',sans-serif;font-weight:900;font-size:17px;color:#031017;
+  background:linear-gradient(140deg,var(--cyan),#66f0ff 40%,var(--violet));
+  box-shadow:0 0 20px rgba(0,229,255,.4), inset 0 0 12px rgba(255,255,255,.35);
+}
+.brand-name{
+  font-family:'Orbitron',sans-serif;font-weight:700;font-size:15px;letter-spacing:.22em;
+  color:#eaf7ff;text-shadow:0 0 16px rgba(0,229,255,.5);line-height:1.1;
+}
+.brand-sub{font-size:10.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-sub b{color:var(--cyan);font-weight:500}
+
+.topbar-status{display:flex;gap:7px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.13em;
+  padding:5px 9px;border-radius:99px;
+  border:1px solid var(--line-2);background:rgba(10,20,34,.6);color:var(--muted);
+  text-transform:uppercase;white-space:nowrap;transition:.25s;
+}
+.pill i{width:6px;height:6px;border-radius:50%;background:var(--dim);box-shadow:0 0 6px currentColor;transition:.25s}
+.pill.on{color:var(--cyan);border-color:rgba(0,229,255,.34);background:rgba(0,229,255,.07)}
+.pill.on i{background:var(--cyan)}
+.pill.warn{color:var(--amber);border-color:rgba(255,184,77,.3)}
+.pill.warn i{background:var(--amber)}
+.pill.off{color:var(--red);border-color:rgba(255,95,122,.28)}
+.pill.off i{background:var(--red)}
+
+.icon-btn{
+  width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+  border:1px solid var(--line-2);background:rgba(10,20,34,.6);color:var(--muted);
+  cursor:pointer;transition:.2s;
+}
+.icon-btn:hover{color:var(--cyan);border-color:rgba(0,229,255,.4);background:rgba(0,229,255,.08);transform:translateY(-1px)}
+.topbar-actions{display:flex;gap:7px}
+#btnLeft{display:none}
+#btnRight{display:none}
+
+/* ---------- Layout ---------- */
+.layout{
+  flex:1;min-height:0;display:grid;
+  grid-template-columns:284px minmax(0,1fr) 356px;
+  gap:12px;padding:12px;
+}
+.side{display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;padding-right:2px}
+.card{
+  border:1px solid var(--line-2);border-radius:var(--r);
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 10px 34px rgba(0,0,0,.36);
+  padding:13px;
+}
+.card-title{
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--cyan);opacity:.85;
+  display:flex;align-items:center;gap:8px;margin-bottom:11px;
+}
+.card-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(0,229,255,.28),transparent)}
+
+/* ---------- Stage ---------- */
+.stage{display:flex;flex-direction:column;min-height:0;gap:10px}
+.orb-holder{
+  position:relative;height:196px;flex-shrink:0;border-radius:var(--r);
+  border:1px solid var(--line-2);overflow:hidden;
+  background:radial-gradient(circle at 50% 55%, rgba(0,229,255,.07), rgba(4,9,16,.7) 70%);
+  box-shadow:inset 0 0 70px rgba(0,229,255,.06), 0 10px 34px rgba(0,0,0,.36);
+}
+.orb-holder.flash{animation:flashRing .9s ease-out}
+@keyframes flashRing{
+  0%{box-shadow:inset 0 0 70px rgba(0,229,255,.06), 0 0 0 0 rgba(0,229,255,.5)}
+  100%{box-shadow:inset 0 0 70px rgba(0,229,255,.06), 0 0 0 32px rgba(0,229,255,0)}
+}
+#orb{position:absolute;inset:0;width:100%;height:100%;display:block}
+.orb-label{
+  position:absolute;left:0;right:0;bottom:9px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.32em;
+  color:var(--muted);text-transform:uppercase;pointer-events:none;
+}
+.orb-label b{color:var(--cyan);font-weight:500;text-shadow:0 0 12px rgba(0,229,255,.6)}
+.orb-corner{
+  position:absolute;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;
+  color:var(--dim);text-transform:uppercase;pointer-events:none;
+}
+.orb-corner.tl{top:9px;left:11px}
+.orb-corner.tr{top:9px;right:11px;text-align:right}
+
+/* ---------- Transcript ---------- */
+.transcript{
+  flex:1;min-height:0;overflow-y:auto;padding:14px;
+  border:1px solid var(--line-2);border-radius:var(--r);
+  background:linear-gradient(180deg, rgba(9,17,29,.72), rgba(6,12,22,.55));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;
+}
+.msg{display:flex;gap:10px;max-width:100%;animation:msgIn .34s cubic-bezier(.2,.8,.3,1) both}
+@keyframes msgIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.msg.user{flex-direction:row-reverse}
+.avatar{
+  width:30px;height:30px;border-radius:9px;flex-shrink:0;display:grid;place-items:center;
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:.04em;
+}
+.msg.robert .avatar{background:linear-gradient(140deg,rgba(0,229,255,.22),rgba(124,92,255,.22));color:var(--cyan);border:1px solid rgba(0,229,255,.32);box-shadow:0 0 14px rgba(0,229,255,.18)}
+.msg.user .avatar{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--line-2)}
+.msg.system .avatar{background:rgba(34,224,161,.1);color:var(--green);border:1px solid rgba(34,224,161,.28)}
+.bubble{max-width:min(680px,84%);padding:9px 13px;border-radius:12px;border:1px solid var(--line-2);background:rgba(12,22,36,.72);font-size:13.5px;line-height:1.6}
+.msg.robert .bubble{border-top-left-radius:3px;border-color:rgba(0,229,255,.18)}
+.msg.user .bubble{border-top-right-radius:3px;background:rgba(0,229,255,.09);border-color:rgba(0,229,255,.28);color:#e9f8ff}
+.msg.system .bubble{background:rgba(34,224,161,.06);border-color:rgba(34,224,161,.2);color:#b9f4dd;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.03em}
+.msg.error .bubble{background:rgba(255,95,122,.08);border-color:rgba(255,95,122,.3);color:#ffc5d0}
+.meta{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.bubble .txt{white-space:pre-wrap;word-break:break-word}
+.bubble .txt b{color:var(--cyan);font-weight:600}
+.bubble .txt code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(0,229,255,.1);padding:1px 5px;border-radius:5px;color:#9fe9ff}
+
+.typing{display:inline-flex;gap:4px;align-items:center;padding:3px 0}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--cyan);opacity:.4;animation:dots 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.16s}
+.typing span:nth-child(3){animation-delay:.32s}
+@keyframes dots{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+/* ---------- Composer ---------- */
+.composer{
+  display:flex;align-items:center;gap:9px;padding:8px;flex-shrink:0;
+  border:1px solid var(--line-2);border-radius:var(--r);
+  background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 10px 30px rgba(0,0,0,.36);
+}
+.composer:focus-within{border-color:rgba(0,229,255,.4);box-shadow:0 0 0 3px rgba(0,229,255,.07),0 10px 30px rgba(0,0,0,.36)}
+.mic-btn{
+  width:40px;height:40px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;cursor:pointer;
+  border:1px solid rgba(0,229,255,.28);background:rgba(0,229,255,.07);color:var(--cyan);transition:.2s;
+}
+.mic-btn:hover{background:rgba(0,229,255,.14);transform:translateY(-1px)}
+.mic-btn.live{background:rgba(255,95,122,.14);border-color:rgba(255,95,122,.5);color:#ff97ab;animation:micPulse 1.5s infinite}
+.mic-btn.wake{background:rgba(34,224,161,.12);border-color:rgba(34,224,161,.45);color:var(--green)}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,95,122,.42)}50%{box-shadow:0 0 0 9px rgba(255,95,122,0)}}
+#inp{
+  flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--text);
+  font-size:14px;font-family:inherit;padding:8px 4px;
+}
+#inp::placeholder{color:var(--dim)}
+.send-btn{
+  width:40px;height:40px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;cursor:pointer;
+  border:1px solid rgba(124,92,255,.32);background:linear-gradient(140deg,rgba(124,92,255,.22),rgba(0,229,255,.16));color:#cfe9ff;transition:.2s;
+}
+.send-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,92,255,.3)}
+
+.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;flex-shrink:0;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  white-space:nowrap;font-size:11.5px;padding:6px 12px;border-radius:99px;cursor:pointer;
+  border:1px solid var(--line-2);background:rgba(10,20,34,.6);color:var(--muted);transition:.2s;
+}
+.chip:hover{color:var(--cyan);border-color:rgba(0,229,255,.42);background:rgba(0,229,255,.08);transform:translateY(-1px)}
+
+/* ---------- Modules ---------- */
+.module{
+  display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:10px;
+  border:1px solid transparent;transition:.2s;cursor:default;
+}
+.module:hover{background:rgba(0,229,255,.05);border-color:var(--line)}
+.module .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--dim)}
+.module.on .dot{background:var(--green);box-shadow:0 0 9px rgba(34,224,161,.8)}
+.module.standby .dot{background:var(--amber);box-shadow:0 0 9px rgba(255,184,77,.7)}
+.module.off .dot{background:var(--red);box-shadow:0 0 9px rgba(255,95,122,.6)}
+.module .nm{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#b9d3e8}
+.module .st{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+.module.on .st{color:var(--green)}
+.module.standby .st{color:var(--amber)}
+.module.off .st{color:var(--red)}
+
+/* ---------- Q&A / lists ---------- */
+.qlist{display:flex;flex-direction:column;gap:6px}
+.qbtn{
+  text-align:left;font-size:12px;padding:8px 10px;border-radius:9px;cursor:pointer;
+  border:1px solid var(--line-2);background:rgba(10,20,34,.5);color:#a9c2d8;transition:.18s;
+  display:flex;align-items:center;gap:8px;
+}
+.qbtn:hover{border-color:rgba(0,229,255,.36);color:#dff4ff;background:rgba(0,229,255,.07);transform:translateX(2px)}
+.qbtn::before{content:'›';color:var(--cyan);font-weight:700;font-size:13px}
+
+/* ---------- Right panel tabs ---------- */
+.tabs{display:flex;gap:3px;padding:3px;border-radius:11px;background:rgba(6,12,21,.7);border:1px solid var(--line-2)}
+.tab{
+  flex:1;padding:7px 4px;border-radius:8px;border:none;background:transparent;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);transition:.2s;white-space:nowrap;
+}
+.tab:hover{color:var(--text)}
+.tab.active{background:linear-gradient(140deg,rgba(0,229,255,.17),rgba(124,92,255,.14));color:var(--cyan);box-shadow:inset 0 0 12px rgba(0,229,255,.1)}
+
+.field{margin-bottom:11px}
+.field label{
+  display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:5px;
+}
+.field input[type=text],.field input[type=password],.field select,.field input[type=number],.field textarea{
+  width:100%;padding:8px 10px;border-radius:9px;font-family:inherit;font-size:12.5px;
+  background:rgba(6,12,21,.72);border:1px solid var(--line-2);color:var(--text);outline:none;transition:.2s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(0,229,255,.45);box-shadow:0 0 0 3px rgba(0,229,255,.07)}
+.field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.field textarea{resize:vertical;min-height:56px;font-family:'JetBrains Mono',monospace;font-size:11.5px}
+.field input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:99px;background:rgba(0,229,255,.15);outline:none}
+.field input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 10px rgba(0,229,255,.7)}
+.field input[type=range]::-moz-range-thumb{width:14px;height:14px;border:none;border-radius:50%;background:var(--cyan);cursor:pointer}
+.range-val{float:right;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cyan)}
+
+.toggle-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(120,160,200,.08)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-row .tl{flex:1;min-width:0}
+.toggle-row .tl b{display:block;font-size:12.5px;font-weight:500;color:#cfe2f3}
+.toggle-row .tl span{display:block;font-size:10.5px;color:var(--dim);line-height:1.35;margin-top:2px}
+.switch{position:relative;width:38px;height:21px;flex-shrink:0;cursor:pointer}
+.switch input{opacity:0;width:0;height:0;position:absolute}
+.switch .sl{position:absolute;inset:0;border-radius:99px;background:rgba(120,160,200,.2);transition:.25s;border:1px solid var(--line-2)}
+.switch .sl::before{content:'';position:absolute;width:15px;height:15px;left:2px;top:2px;border-radius:50%;background:#8ba4bd;transition:.25s}
+.switch input:checked + .sl{background:rgba(0,229,255,.25);border-color:rgba(0,229,255,.5)}
+.switch input:checked + .sl::before{transform:translateX(17px);background:var(--cyan);box-shadow:0 0 10px rgba(0,229,255,.8)}
+
+.perm{padding:11px 0;border-bottom:1px solid rgba(120,160,200,.08)}
+.perm:last-child{border-bottom:none}
+.perm-h{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.perm-h b{font-size:12.5px;font-weight:600;color:#d3e6f7}
+.perm-h code{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.06em}
+.perm p{font-size:10.5px;color:var(--dim);line-height:1.4;margin-bottom:8px}
+.seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid var(--line-2)}
+.seg button{
+  padding:5px 12px;border:none;background:rgba(6,12,21,.7);color:var(--muted);cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;transition:.18s;
+}
+.seg button + button{border-left:1px solid var(--line-2)}
+.seg button:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.seg button.allow.active{background:rgba(34,224,161,.2);color:var(--green)}
+.seg button.ask.active{background:rgba(255,184,77,.2);color:var(--amber)}
+.seg button.deny.active{background:rgba(255,95,122,.18);color:var(--red)}
+
+.item{
+  display:flex;align-items:flex-start;gap:9px;padding:9px 10px;border-radius:10px;
+  border:1px solid var(--line-2);background:rgba(10,20,34,.5);margin-bottom:7px;transition:.2s;
+}
+.item:hover{border-color:rgba(0,229,255,.28)}
+.item .ck{
+  width:17px;height:17px;border-radius:5px;flex-shrink:0;margin-top:1px;cursor:pointer;
+  border:1px solid var(--line-2);background:rgba(6,12,21,.7);display:grid;place-items:center;
+  font-size:10px;color:transparent;transition:.2s;
+}
+.item.done .ck{background:rgba(34,224,161,.25);border-color:rgba(34,224,161,.5);color:var(--green)}
+.item .body{flex:1;min-width:0}
+.item .body b{display:block;font-size:12.5px;font-weight:500;color:#d3e6f7;word-break:break-word}
+.item.done .body b{text-decoration:line-through;color:var(--dim)}
+.item .body span{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--dim);margin-top:3px;text-transform:uppercase}
+.item .x{
+  background:none;border:none;color:var(--dim);cursor:pointer;font-size:15px;line-height:1;padding:2px 4px;transition:.2s;
+}
+.item .x:hover{color:var(--red)}
+.empty{
+  text-align:center;padding:22px 10px;color:var(--dim);font-size:12px;
+  border:1px dashed var(--line-2);border-radius:10px;
+}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:8px 14px;border-radius:9px;cursor:pointer;font-size:12px;font-weight:500;
+  border:1px solid rgba(0,229,255,.3);background:rgba(0,229,255,.1);color:var(--cyan);transition:.2s;
+  font-family:inherit;
+}
+.btn:hover{background:rgba(0,229,255,.18);transform:translateY(-1px)}
+.btn.ghost{border-color:var(--line-2);background:rgba(10,20,34,.5);color:var(--muted)}
+.btn.ghost:hover{color:var(--text);border-color:rgba(0,229,255,.3)}
+.btn.danger{border-color:rgba(255,95,122,.35);background:rgba(255,95,122,.1);color:var(--red)}
+.btn.danger:hover{background:rgba(255,95,122,.2)}
+.btn.full{width:100%}
+.btn-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+
+.log{
+  font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.55;
+  padding:6px 8px;border-radius:7px;border-left:2px solid var(--line-2);
+  background:rgba(6,12,21,.5);margin-bottom:5px;word-break:break-word;
+}
+.log .ts{color:var(--dim);margin-right:6px}
+.log.tool{border-left-color:var(--cyan);color:#a5e6f7}
+.log.error{border-left-color:var(--red);color:#ffb3c0}
+.log.voice{border-left-color:var(--violet);color:#c8bcff}
+.log.perm{border-left-color:var(--amber);color:#ffd9a3}
+.log.system{border-left-color:var(--green);color:#a6efd3}
+
+.kv{display:flex;justify-content:space-between;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 0;border-bottom:1px solid rgba(120,160,200,.07)}
+.kv:last-child{border-bottom:none}
+.kv span{color:var(--dim);letter-spacing:.07em}
+.kv b{color:#a9c9e4;font-weight:500;text-align:right}
+
+/* ---------- Modal ---------- */
+.modal-root{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:18px}
+.modal-root.show{display:flex}
+.modal-scrim{position:absolute;inset:0;background:rgba(2,5,10,.76);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);animation:fadeIn .22s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  position:relative;width:min(520px,100%);max-height:88vh;overflow-y:auto;border-radius:16px;padding:20px;
+  border:1px solid rgba(0,229,255,.24);background:linear-gradient(180deg,rgba(11,21,35,.98),rgba(6,12,21,.98));
+  box-shadow:0 28px 80px rgba(0,0,0,.66), 0 0 0 1px rgba(0,229,255,.06), inset 0 1px 0 rgba(255,255,255,.05);
+  animation:modalIn .3s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.modal h3{
+  font-family:'Orbitron',sans-serif;font-size:14px;letter-spacing:.13em;text-transform:uppercase;
+  color:#eaf7ff;margin-bottom:9px;text-shadow:0 0 16px rgba(0,229,255,.35);
+}
+.modal p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.modal .actions{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}
+.modal .tag{
+  display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;
+  padding:3px 8px;border-radius:6px;background:rgba(255,184,77,.14);color:var(--amber);
+  border:1px solid rgba(255,184,77,.3);margin-bottom:11px;text-transform:uppercase;
+}
+#visionWrap{margin-bottom:14px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#000}
+#visionVideo{width:100%;display:block;max-height:280px;object-fit:cover}
+
+/* ---------- Scrim / responsive ---------- */
+.scrim{position:fixed;inset:0;background:rgba(2,5,10,.7);backdrop-filter:blur(4px);z-index:55;display:none}
+.scrim.show{display:block;animation:fadeIn .2s}
+.side-head{display:none}
+
+@media (max-width:1180px){
+  .layout{grid-template-columns:minmax(0,1fr);padding:10px;gap:10px}
+  .side{
+    position:fixed;top:0;bottom:0;width:min(90vw,352px);z-index:60;
+    padding:14px;background:linear-gradient(180deg,rgba(7,13,23,.99),rgba(4,9,16,.99));
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    transition:transform .34s cubic-bezier(.4,0,.2,1);overflow-y:auto;gap:10px;
+  }
+  .side.left{left:0;transform:translateX(-104%);border-right:1px solid var(--line)}
+  .side.right{right:0;transform:translateX(104%);border-left:1px solid var(--line)}
+  .side.open{transform:translateX(0)}
+  .side-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .side-head .t{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:.18em;color:#dff2ff}
+  #btnLeft,#btnRight{display:grid}
+}
+@media (max-width:720px){
+  .topbar{padding:9px 11px;gap:9px}
+  .brand-name{font-size:13px;letter-spacing:.17em}
+  .brand-sub{font-size:9px}
+  .topbar-status{display:none}
+  .orb-holder{height:158px}
+  .layout{padding:9px;gap:9px}
+  .transcript{padding:11px}
+  .bubble{max-width:88%;font-size:13px}
+  .chips{gap:6px}
+  .app{height:100dvh}
+}
+@media (max-width:400px){
+  .brand-sub{display:none}
+}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ================= TOP BAR ================= -->
+  <header class="topbar">
+    <button class="icon-btn" id="btnLeft" aria-label="Modules">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <div class="brand">
+      <div class="logo-mark">R</div>
+      <div>
+        <div class="brand-name">ROBERT</div>
+        <div class="brand-sub">Personal AI Assistant · <b id="clock">--:--:--</b></div>
+      </div>
+    </div>
+    <div class="topbar-status">
+      <div class="pill" id="pillVoice"><i></i>VOICE</div>
+      <div class="pill" id="pillBrain"><i></i>BRAIN</div>
+      <div class="pill" id="pillNet"><i></i>NET</div>
+      <div class="pill" id="pillPerm"><i></i>PERMS</div>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="btnRight" aria-label="Settings">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= LAYOUT ================= -->
+  <div class="layout">
+
+    <!-- ---------- LEFT : Modules ---------- -->
+    <aside class="side left" id="leftPanel">
+      <div class="side-head">
+        <span class="t">MODULES</span>
+        <button class="icon-btn" data-close="left">✕</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Skill Modules</div>
+        <div id="modules"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Quick Commands</div>
+        <div class="qlist" id="quickList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">System</div>
+        <div id="sysInfo"></div>
+      </div>
+    </aside>
+
+    <!-- ---------- CENTER : Stage ---------- -->
+    <main class="stage">
+      <div class="orb-holder" id="orbHolder">
+        <canvas id="orb"></canvas>
+        <div class="orb-corner tl">SYS / ROBERT v1.0</div>
+        <div class="orb-corner tr" id="orbMode">STANDBY</div>
+        <div class="orb-label" id="orbLabel">TAP THE MIC OR SAY <b>“HEY ROBERT”</b></div>
+      </div>
+
+      <div class="transcript" id="transcript"></div>
+
+      <div class="composer">
+        <button class="mic-btn" id="micBtn" title="Voice input (Ctrl+M)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <input id="inp" type="text" autocomplete="off" spellcheck="false" placeholder="Type a command…  e.g. “open youtube”, “5 minute ka timer lagao”"/>
+        <button class="send-btn" id="sendBtn" title="Send">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+
+      <div class="chips" id="chips"></div>
+    </main>
+
+    <!-- ---------- RIGHT : Control ---------- -->
+    <aside class="side right" id="rightPanel">
+      <div class="side-head">
+        <span class="t">CONTROL</span>
+        <button class="icon-btn" data-close="right">✕</button>
+      </div>
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="profile">Profile</button>
+        <button class="tab" data-tab="perms">Access</button>
+        <button class="tab" data-tab="data">Data</button>
+        <button class="tab" data-tab="auto">Auto</button>
+        <button class="tab" data-tab="logs">Logs</button>
+      </div>
+      <div class="card" id="tabBody"></div>
+    </aside>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="modal-root" id="modalRoot"></div>
+
+<script>
+/* ============================================================================
+   ROBERT — Personal AI Assistant
+   ----------------------------------------------------------------------------
+   Modular architecture:
+     1.  UTIL            helpers
+     2.  STATE           persistent profile / memory / permissions
+     3.  LOGGER          activity log
+     4.  PERMISSIONS     permission manager (allow / ask / deny)
+     5.  BRIDGE          native-shell bridge (OS control when available)
+     6.  TOOLS           extensible tool registry
+     7.  MEMORY          short-term conversation memory
+     8.  VOICE           wake word, speech-to-text, text-to-speech
+     9.  SCHEDULER       timers & reminders
+     10. AUTOMATION      routines & custom commands
+     11. BRAIN           NLU + intent dispatch + response style
+     12. UI              rendering, reactor canvas, panels
+     13. BOOT            init sequence
+   ========================================================================= */
+(function(){
+'use strict';
+
+/* ========================= 1. UTIL ========================= */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+const uid = ()=>Math.random().toString(36).slice(2,9);
+const sleep = ms=>new Promise(r=>setTimeout(r,ms));
+const esc = s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const nowHHMM = ()=> new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+const isNum = v=>typeof v==='number' && isFinite(v);
+
+function setPath(obj,path,val){
+  const parts=path.split('.'); let o=obj;
+  for(let i=0;i<parts.length-1;i++){ if(o[parts[i]]==null) o[parts[i]]={}; o=o[parts[i]]; }
+  o[parts[parts.length-1]]=val;
+}
+function getPath(obj,path){
+  return path.split('.').reduce((o,k)=>(o==null?undefined:o[k]),obj);
+}
+function deepMerge(base, over){
+  if(over===undefined||over===null) return base;
+  if(Array.isArray(base)) return Array.isArray(over)?over:base;
+  if(typeof base==='object'&&base!==null){
+    const out={...base};
+    if(typeof over==='object'&&!Array.isArray(over)){
+      for(const k of Object.keys(over)) out[k]= (k in base)? deepMerge(base[k],over[k]) : over[k];
+    }
+    return out;
+  }
+  return over;
+}
+
+/* ========================= 2. STATE ========================= */
+const STORE_KEY='robert.state.v1';
+
+const DEFAULT_STATE={
+  meta:{created:Date.now(), version:'1.0.0'},
+  profile:{
+    name:'Boss',
+    language:'hinglish',           /* hinglish | hindi | english */
+    personality:'jarvis',          /* jarvis | friendly | formal | minimal */
+    timezone: (Intl.DateTimeFormat().resolvedOptions().timeZone||'Asia/Kolkata'),
+    greetOnStart:true,
+    voice:{
+      enabled:true,
+      name:'',
+      rate:1,
+      pitch:1,
+      volume:1
+    },
+    wakeWord:'robert',
+    wakeWordEnabled:false,
+    continuous:false,
+    proactive:false,
+    sttLang:'en-IN',
+    llm:{ endpoint:'https://api.openai.com/v1/chat/completions', apiKey:'', model:'gpt-4o-mini' }
+  },
+  permissions:{
+    web:        {level:'allow'},
+    notifications:{level:'ask'},
+    automation: {level:'allow'},
+    mic:        {level:'allow'},
+    camera:     {level:'ask'},
+    files:      {level:'deny'},
+    system:     {level:'ask'},
+    llm:        {level:'ask'}
+  },
+  memory:{
+    messages:[],       /* {role, text, ts} */
+    notes:[],          /* {id, text, ts} */
+    tasks:[],          /* {id, text, done, ts} */
+    reminders:[],      /* {id, text, at, fired} */
+    customCommands:[], /* {id, trigger, response} */
+    routines:[]        /* {id, name, trigger, actions:[]} */
+  },
+  logs:[]
+};
+
+let S = load();
+
+function load(){
+  try{
+    const raw=localStorage.getItem(STORE_KEY);
+    if(!raw) return structuredCloneSafe(DEFAULT_STATE);
+    return deepMerge(structuredCloneSafe(DEFAULT_STATE), JSON.parse(raw));
+  }catch(e){
+    return structuredCloneSafe(DEFAULT_STATE);
+  }
+}
+function structuredCloneSafe(o){ return JSON.parse(JSON.stringify(o)); }
+
+let saveTimer=null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){}
+  },180);
+}
+function saveNow(){
+  clearTimeout(saveTimer);
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){}
+}
+
+/* Language helper ------------------------------------------------ */
+function t(o){
+  const l=S.profile.language;
+  if(l==='english') return o.en!==undefined?o.en:o.hi_en;
+  if(l==='hindi')   return o.hi!==undefined?o.hi:o.hi_en;
+  return o.hi_en!==undefined?o.hi_en:o.en;
+}
+
+/* ========================= 3. LOGGER ========================= */
+const Log={
+  add(type,msg){
+    S.logs.unshift({t:Date.now(),type,msg:String(msg).slice(0,380)});
+    if(S.logs.length>220) S.logs.length=220;
+    save();
+    UI.renderLogsIfVisible();
+  }
+};
+
+/* ========================= 4. PERMISSIONS ========================= */
+const PERM_META={
+  web:          {label:'Web & Search',   desc:'Open websites and run web searches'},
+  notifications:{label:'Notifications',  desc:'Show system notifications for reminders and timers'},
+  automation:   {label:'Automation',     desc:'Run multi-step routines and user-created commands'},
+  mic:          {label:'Microphone',     desc:'Speech recognition and wake-word listening'},
+  camera:       {label:'Camera',         desc:'Vision module — snapshot capture only, never recorded'},
+  files:        {label:'File System',    desc:'Read / write files. Requires the native desktop shell'},
+  system:       {label:'System Control', desc:'Launch apps, change OS settings. Requires the native desktop shell'},
+  llm:          {label:'Cloud Brain',    desc:'Forward unresolved queries to an external LLM API'}
+};
+
+const PermissionManager={
+  level(key){ return (S.permissions[key] && S.permissions[key].level) || 'deny'; },
+  isAllowed(key){ return this.level(key)==='allow'; },
+  async check(key, actionLabel){
+    const lvl=this.level(key);
+    if(lvl==='allow'){ Log.add('perm',`GRANTED · ${key} · ${actionLabel||''}`); return true; }
+    if(lvl==='deny'){
+      Log.add('perm',`DENIED · ${key} · ${actionLabel||''}`);
+      return false;
+    }
+    Log.add('perm',`ASK · ${key} · ${actionLabel||''}`);
+    const ok = await Modal.confirm({
+      tag:'Permission request',
+      title: (PERM_META[key]?.label || key)+' access',
+      body: `ROBERT needs <b style="color:#00e5ff">${PERM_META[key]?.label||key}</b> access to perform: <b style="color:#d8e7f6">${esc(actionLabel||'this action')}</b>.<br><br>${PERM_META[key]?.desc||''}<br><br><span style="color:#4a5f76">You can change this anytime in Control → Access.</span>`,
+      ok:`Allow once`,
+      cancel:'Deny'
+    });
+    if(ok){ S.permissions[key].level='allow'; save(); UI.renderTab(); }
+    Log.add('perm',`${ok?'USER ALLOWED':'USER DENIED'} · ${key}`);
+    return ok;
+  }
+};
+
+/* ========================= 5. BRIDGE (native shell) ========================= */
+const Bridge={
+  get native(){ return (typeof window.robertNative!=='undefined')?window.robertNative:null; },
+  get available(){ return !!this.native; },
+  async call(method,args){
+    if(!this.native || typeof this.native[method]!=='function')
+      throw new Error('NATIVE_UNAVAILABLE');
+    return await this.native[method](args);
+  }
+};
+
+/* ========================= 6. TOOL REGISTRY ========================= */
+const Tools={
+  map:new Map(),
+  register(def){ this.map.set(def.name,def); return def; },
+  get(n){ return this.map.get(n); },
+  list(){ return Array.from(this.map.values()); },
+  async run(name,args={},ctx={}){
+    const tool=this.map.get(name);
+    if(!tool) return {ok:false,error:'Unknown tool: '+name};
+    if(tool.permission){
+      const ok=await PermissionManager.check(tool.permission, tool.label||tool.description||name);
+      if(!ok) return {ok:false,error:'PERMISSION_DENIED'};
+    }
+    try{
+      const data=await tool.run(args,ctx);
+      Log.add('tool',`${name} → ok`);
+      return {ok:true,data};
+    }catch(e){
+      Log.add('error',`${name} → ${e.message}`);
+      return {ok:false,error:e.message};
+    }
+  }
+};
+
+/* ---- Site map ---- */
+const SITES={
+  youtube:'https://www.youtube.com', google:'https://www.google.com',
+  gmail:'https://mail.google.com', mail:'https://mail.google.com',
+  maps:'https://maps.google.com', github:'https://github.com',
+  whatsapp:'https://web.whatsapp.com', spotify:'https://open.spotify.com',
+  netflix:'https://www.netflix.com', instagram:'https://www.instagram.com',
+  twitter:'https://twitter.com', x:'https://x.com', linkedin:'https://www.linkedin.com',
+  wikipedia:'https://en.wikipedia.org', amazon:'https://www.amazon.in',
+  flipkart:'https://www.flipkart.com', drive:'https://drive.google.com',
+  calendar:'https://calendar.google.com', chatgpt:'https://chat.openai.com',
+  reddit:'https://www.reddit.com', stackoverflow:'https://stackoverflow.com',
+  news:'https://news.google.com', translate:'https://translate.google.com',
+  classroom:'https://classroom.google.com', meet:'https://meet.google.com'
+};
+
+/* ---- Weather codes ---- */
+const WCODE={
+  0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Rime fog',
+  51:'Light drizzle',53:'Drizzle',55:'Dense drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',
+  71:'Light snow',73:'Snow',75:'Heavy snow',80:'Rain showers',81:'Rain showers',82:'Violent showers',
+  95:'Thunderstorm',96:'Thunderstorm + hail',99:'Thunderstorm + hail'
+};
+
+/* ---------- TOOL DEFINITIONS ---------- */
+
+Tools.register({
+  name:'web.open', permission:'web', label:'open a website',
+  description:'Open a website or known web app in a new tab',
+  async run({target}){
+    const key=String(target||'').toLowerCase().trim();
+    let url=null;
+    if(/^https?:\/\//i.test(target)) url=target;
+    else if(SITES[key]) url=SITES[key];
+    else {
+      /* fuzzy: "youtube.com", "open gmail" */
+      const clean=key.replace(/\s+/g,'');
+      for(const k of Object.keys(SITES)) if(clean.includes(k)){ url=SITES[k]; break; }
+    }
+    if(!url) throw new Error('UNKNOWN_TARGET');
+    const w=window.open(url,'_blank','noopener,noreferrer');
+    if(!w) throw new Error('POPUP_BLOCKED');
+    return url;
+  }
+});
+
+Tools.register({
+  name:'web.search', permission:'web', label:'run a web search',
+  description:'Search the web for a query',
+  async run({q, engine='google'}){
+    if(!q) throw new Error('NO_QUERY');
+    const engines={
+      google:'https://www.google.com/search?q=',
+      youtube:'https://www.youtube.com/results?search_query=',
+      maps:'https://www.google.com/maps/search/',
+      amazon:'https://www.amazon.in/s?k=',
+      wikipedia:'https://en.wikipedia.org/w/index.php?search='
+    };
+    const base=engines[engine]||engines.google;
+    const w=window.open(base+encodeURIComponent(q),'_blank','noopener,noreferrer');
+    if(!w) throw new Error('POPUP_BLOCKED');
+    return base+q;
+  }
+});
+
+Tools.register({
+  name:'web.weather', permission:'web', label:'fetch live weather',
+  description:'Live weather from the Open-Meteo public API',
+  async run({city}){
+    if(!city) throw new Error('NO_CITY');
+    const geo=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`).then(r=>r.json());
+    if(!geo.results||!geo.results.length) throw new Error('CITY_NOT_FOUND');
+    const g=geo.results[0];
+    const w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${g.latitude}&longitude=${g.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m`).then(r=>r.json());
+    const c=w.current;
+    return {
+      city:`${g.name}${g.country_code?', '+g.country_code:''}`,
+      temp:c.temperature_2m, feels:c.apparent_temperature,
+      humidity:c.relative_humidity_2m, wind:c.wind_speed_10m,
+      desc:WCODE[c.weather_code]||'Unknown'
+    };
+  }
+});
+
+Tools.register({
+  name:'calc.eval', permission:null,
+  description:'Evaluate an arithmetic expression safely',
+  async run({expr}){
+    const e=Mathify(expr);
+    if(!e) throw new Error('BAD_EXPRESSION');
+    const v=Function('"use strict";return ('+e+')')();
+    if(!isNum(v)) throw new Error('BAD_EXPRESSION');
+    return v;
+  }
+});
+
+Tools.register({
+  name:'time.now', permission:null,
+  async run(){
+    const d=new Date();
+    return { time:d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',timeZone:S.profile.timezone}),
+             date:d.toLocaleDateString([],{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:S.profile.timezone}) };
+  }
+});
+
+Tools.register({
+  name:'system.status', permission:null,
+  async run(){
+    return {
+      voice: Voice.supported?'online':'unavailable',
+      wakeWord: S.profile.wakeWordEnabled?'armed':'off',
+      voiceOut: S.profile.voice.enabled?'on':'muted',
+      brain: (S.profile.llm.apiKey?'hybrid (rules + LLM)':'local rules'),
+      tools: Tools.list().length,
+      native: Bridge.available?'connected':'not installed',
+      tasks: S.memory.tasks.filter(x=>!x.done).length,
+      reminders: S.memory.reminders.filter(x=>!x.fired).length,
+      notes: S.memory.notes.length
+    };
+  }
+});
+
+Tools.register({
+  name:'vision.snapshot', permission:'camera', label:'open the camera',
+  async run(){
+    return await Vision.open();
+  }
+});
+
+/* --- safe math stringifier --- */
+function Mathify(raw){
+  let e=String(raw).toLowerCase()
+    .replace(/plus|jod|जोड़|जमा/g,'+')
+    .replace(/minus|ghata|घटा|माइनस/g,'-')
+    .replace(/multiplied by|times|into|guna|गुणा/g,'*')
+    .replace(/divided by|bhaag|भाग|division/g,'/')
+    .replace(/percent of|% of/g,'/100*')
+    .replace(/square root of|sqrt/g,'Math.sqrt')
+    .replace(/\^/g,'**')
+    .replace(/[×x](?=\s*\d)/g,'*')
+    .replace(/[÷]/g,'/')
+    .replace(/[^0-9+\-*/().% ]/g,' ')
+    .replace(/\s+/g,'')
+    .trim();
+  if(!e||!/[0-9]/.test(e)) return null;
+  if(/[+\-*/.]{3,}/.test(e)) return null;
+  return e;
+}
+
+/* ========================= 7. MEMORY ========================= */
+const Memory={
+  push(entry){ S.memory.messages.push({...entry,ts:Date.now()});
+    if(S.memory.messages.length>60) S.memory.messages.splice(0,S.memory.messages.length-60);
+    save(); },
+  recent(n=6){ return S.memory.messages.slice(-n); },
+  clear(){ S.memory.messages=[]; save(); }
+};
+
+/* ========================= 8. VOICE MODULE ========================= */
+const Voice={
+  supported:false, rec:null, listening:false, mode:null,
+  awake:false, sleepTimer:null, voices:[], speaking:false,
+
+  init(){
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    this.supported=!!SR;
+    if(SR){
+      const r=new SR();
+      r.continuous=false;
+      r.interimResults=true;
+      r.maxAlternatives=1;
+      r.lang=this.recLang();
+      r.onresult=e=>this.onResult(e);
+      r.onerror=e=>this.onError(e);
+      r.onend=()=>this.onEnd();
+      this.rec=r;
+    }
+    if('speechSynthesis' in window){
+      this.loadVoices();
+      window.speechSynthesis.onvoiceschanged=()=>this.loadVoices();
+    }
+    Log.add('voice', this.supported?'Speech recognition engine ready':'Speech recognition not supported in this browser');
+  },
+
+  recLang(){
+    const l=S.profile.language;
+    if(l==='english') return 'en-IN';
+    if(l==='hindi') return 'hi-IN';
+    return S.profile.sttLang||'en-IN';
+  },
+
+  loadVoices(){
+    try{ this.voices=window.speechSynthesis.getVoices()||[]; }catch(e){ this.voices=[]; }
+    UI.renderTab();
+  },
+
+  /* ---- listening ---- */
+  async start(mode){
+    if(!this.supported){
+      UI.say(t({hi_en:'Sir, is browser mein speech recognition support nahi hai. Text input use kijiye.', en:'Speech recognition is not supported in this browser. Please use text input.', hi:'इस ब्राउज़र में स्पीच रिकग्निशन उपलब्ध नहीं है। टेक्स्ट इनपुट का प्रयोग करें।'}),'error');
+      return;
+    }
+    if(this.listening) return;
+    /* microphone permission */
+    if(!PermissionManager.isAllowed('mic')){
+      const ok=await PermissionManager.check('mic','use the microphone');
+      if(!ok) return;
+    }
+    this.mode=mode;
+    try{
+      this.rec.lang=this.recLang();
+      this.rec.continuous = (mode==='wake');
+      this.rec.interimResults=true;
+      this.rec.start();
+      this.listening=true;
+      UI.updateMic();
+      Log.add('voice',`Listening started · mode=${mode}`);
+      if(mode==='wake') UI.setState('listening');
+    }catch(e){
+      Log.add('error','Mic start failed: '+e.message);
+      UI.updateMic();
+    }
+  },
+
+  stop(){
+    this.listening=false; this.awake=false;
+    clearTimeout(this.sleepTimer);
+    try{ this.rec && this.rec.stop(); }catch(e){}
+    UI.updateMic();
+    if(UI.state==='listening') UI.setState('idle');
+    Log.add('voice','Listening stopped');
+  },
+
+  toggle(mode='ptt'){
+    if(this.listening) this.stop(); else this.start(mode);
+  },
+
+  onEnd(){
+    UI.updateMic();
+    if(this.listening && this.mode==='wake'){
+      /* auto-restart continuous wake listener */
+      setTimeout(()=>{ if(this.listening){ try{ this.rec.start(); }catch(e){} } },260);
+    } else if(this.listening && this.mode==='ptt'){
+      this.listening=false; UI.updateMic();
+      if(UI.state==='listening') UI.setState('idle');
+    }
+  },
+
+  onError(e){
+    Log.add('error','Voice error: '+e.error);
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+      this.listening=false; UI.updateMic(); UI.setState('idle');
+      UI.say(t({
+        hi_en:'Sir, microphone access block ho gaya hai. Browser settings se mic allow kijiye, ya text se command dijiye.',
+        en:'Microphone access was blocked. Please allow the microphone in your browser settings, or type your command.',
+        hi:'माइक्रोफ़ोन की अनुमति अवरुद्ध है। कृपया ब्राउज़र में अनुमति दें या टाइप करें।'
+      }),'error');
+    }
+    if(e.error==='no-speech'){ /* silent */ }
+  },
+
+  onResult(e){
+    let interim='', final='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const tr=e.results[i][0].transcript;
+      if(e.results[i].isFinal) final+=tr; else interim+=tr;
+    }
+    UI.setInterim(interim);
+    if(final && final.trim()){
+      UI.setInterim('');
+      this.route(final.trim());
+    }
+  },
+
+  route(text){
+    const lower=text.toLowerCase();
+    const ww=(S.profile.wakeWord||'robert').toLowerCase();
+    const hasWake=lower.includes(ww);
+
+    if(S.profile.wakeWordEnabled || this.mode==='wake'){
+      if(!this.awake){
+        if(!hasWake) return;                     /* ignore ambient speech */
+        this.awake=true;
+        UI.flashWake();
+        const idx=lower.indexOf(ww);
+        const rest=lower.slice(idx+ww.length).replace(/^[\s,.:!-]+/,'').trim();
+        Log.add('voice','Wake word detected');
+        if(rest.length>2){ Brain.process(rest); }
+        else{
+          UI.say(t({hi_en:'Haan '+S.profile.name+', boliye?', en:'Yes '+S.profile.name+', how can I help?', hi:'हाँ '+S.profile.name+', बताइए?'}));
+          UI.setState('listening');
+        }
+        this.armSleep();
+        return;
+      }
+      const idx=lower.indexOf(ww);
+      const rest= idx>=0 ? lower.slice(idx+ww.length).replace(/^[\s,.:!-]+/,'').trim() : lower;
+      if(rest.length>1) Brain.process(rest);
+      this.armSleep();
+    } else {
+      Brain.process(text);
+    }
+  },
+
+  armSleep(){
+    clearTimeout(this.sleepTimer);
+    if(S.profile.continuous) return;            /* continuous conversation mode */
+    this.sleepTimer=setTimeout(()=>{
+      if(this.awake){ this.awake=false; Log.add('voice','Wake word re-armed'); UI.setState('listening'); }
+    },14000);
+  },
+
+  flashWake(){
+    const h=$('#orbHolder');
+    h.classList.remove('flash'); void h.offsetWidth; h.classList.add('flash');
+    UI.setState('listening');
+  },
+
+  /* ---- speech output ---- */
+  speak(text){
+    if(!S.profile.voice.enabled) return;
+    if(!('speechSynthesis' in window)) return;
+    const clean=this.clean(text);
+    if(!clean) return;
+    try{
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(clean);
+      const v=this.voices.find(x=>x.name===S.profile.voice.name);
+      if(v) u.voice=v;
+      u.lang = v ? v.lang : (S.profile.language==='english'?'en-IN':'hi-IN');
+      u.rate = clamp(Number(S.profile.voice.rate)||1, .5, 2);
+      u.pitch= clamp(Number(S.profile.voice.pitch)||1, 0, 2);
+      u.volume=clamp(Number(S.profile.voice.volume)||1, 0, 1);
+      u.onstart=()=>{ this.speaking=true; UI.setState('speaking'); };
+      u.onend=()=>{ this.speaking=false; if(UI.state==='speaking') UI.setState(UI.listeningState()); };
+      u.onerror=()=>{ this.speaking=false; };
+      setTimeout(()=>window.speechSynthesis.speak(u),90);
+    }catch(e){ /* autoplay policy */ }
+  },
+
+  stopSpeaking(){
+    try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch(e){}
+    this.speaking=false;
+  },
+
+  clean(text){
+    return String(text)
+      .replace(/<b>|<\/b>/g,'')
+      .replace(/<[^>]+>/g,'')
+      .replace(/https?:\/\/\S+/g,' link ')
+      .replace(/[*_`#>]/g,'')
+      .replace(/[→·•]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .slice(0,420);
+  }
+};
+
+/* ========================= 9. SCHEDULER ========================= */
+const Scheduler={
+  timers:new Map(),
+  init(){
+    /* re-schedule pending reminders after reload */
+    const now=Date.now();
+    S.memory.reminders.forEach(r=>{
+      if(!r.fired && r.at>now) this.scheduleReminder(r);
+      else if(!r.fired && r.at<=now){ r.fired=true; }
+    });
+    save();
+  },
+  startTimer(seconds,label){
+    const id=uid();
+    const endAt=Date.now()+seconds*1000;
+    const handle=setTimeout(()=>this.fireTimer(id,label), seconds*1000);
+    this.timers.set(id,{handle,endAt,label});
+    return {id,endAt};
+  },
+  fireTimer(id,label){
+    this.timers.delete(id);
+    const msg=t({
+      hi_en:`⏰ Timer khatam${label?` — ${label}`:''}.`,
+      en:`⏰ Timer finished${label?` — ${label}`:''}.`,
+      hi:`⏰ टाइमर समाप्त${label?` — ${label}`:''}।`
+    });
+    UI.say(msg);
+    Notify.show('ROBERT · Timer', msg);
+    Log.add('system','Timer fired: '+(label||id));
+    Proactive.chime();
+  },
+  scheduleReminder(r){
+    const delay=Math.max(0, r.at-Date.now());
+    const handle=setTimeout(()=>this.fireReminder(r.id), Math.min(delay, 2147483000));
+    this.timers.set('rem_'+r.id,{handle,endAt:r.at,label:r.text});
+  },
+  fireReminder(id){
+    const r=S.memory.reminders.find(x=>x.id===id);
+    if(!r||r.fired) return;
+    r.fired=true; save(); UI.renderTab();
+    const msg=t({
+      hi_en:`🔔 Reminder: ${r.text}`,
+      en:`🔔 Reminder: ${r.text}`,
+      hi:`🔔 रिमाइंडर: ${r.text}`
+    });
+    UI.say(msg);
+    Notify.show('ROBERT · Reminder', r.text);
+    Log.add('system','Reminder fired: '+r.text);
+    Proactive.chime();
+  }
+};
+
+const Notify={
+  async request(){
+    if(!('Notification' in window)) return false;
+    if(Notification.permission==='granted') return true;
+    if(Notification.permission==='denied') return false;
+    try{ const p=await Notification.requestPermission(); return p==='granted'; }catch(e){ return false; }
+  },
+  show(title,body){
+    if(!('Notification' in window)) return;
+    if(Notification.permission!=='granted') return;
+    if(!PermissionManager.isAllowed('notifications')) return;
+    try{ new Notification(title,{body, silent:false}); }catch(e){}
+  }
+};
+
+/* ========================= 10. AUTOMATION ========================= */
+const ROUTINE_ACTIONS={
+  greeting:{label:'Speak greeting', run:async()=>{ UI.say(Greetings.line()); }},
+  agenda:{label:'Daily agenda summary', run:async()=>{ await Brain.agenda(); }},
+  weather:{label:'Weather report', run:async()=>{ await Brain.weatherFlow(Brain.defaultCity()); }},
+  tasks:{label:'Read pending tasks', run:async()=>{ await Brain.listTasks(true); }},
+  openCalendar:{label:'Open calendar', run:async()=>{ const r=await Tools.run('web.open',{target:'calendar'}); if(!r.ok) UI.say(t({hi_en:'Calendar open nahi ho paya.',en:'Could not open the calendar.'})); }},
+  openMail:{label:'Open email', run:async()=>{ const r=await Tools.run('web.open',{target:'gmail'}); if(!r.ok) UI.say(t({hi_en:'Mail open nahi ho paya.',en:'Could not open email.'})); }},
+  focusTimer:{label:'Start 50-minute focus timer', run:async()=>{ Scheduler.startTimer(50*60,'Focus session'); UI.say(t({hi_en:'50 minute ka focus timer chalu.',en:'50 minute focus timer started.',hi:'50 मिनट का फोकस टाइमर शुरू।'})); }},
+  music:{label:'Open music', run:async()=>{ await Tools.run('web.search',{q:'lofi study music',engine:'youtube'}); }},
+  nightMode:{label:'Dim the interface (night mode)', run:async()=>{ document.body.classList.add('dim'); }},
+  dayMode:{label:'Restore interface brightness', run:async()=>{ document.body.classList.remove('dim'); }}
+};
+
+const Automation={
+  async runRoutine(routine){
+    if(!await PermissionManager.check('automation','run routine “'+routine.name+'”')) return false;
+    const steps=(routine.actions||[]).map(a=>ROUTINE_ACTIONS[a]).filter(Boolean);
+    if(!steps.length){ UI.say(t({hi_en:'Is routine mein koi action nahi hai.',en:'This routine has no actions.'})); return false; }
+    UI.say(t({hi_en:`Routine “${routine.name}” chalu kar raha hoon.`,en:`Running routine “${routine.name}”.`,hi:`रूटीन “${routine.name}” चालू कर रहा हूँ।`}));
+    Log.add('system','Routine started: '+routine.name);
+    for(const s of steps){
+      await sleep(520);
+      try{ await s.run(); }catch(e){ Log.add('error','Routine step failed: '+e.message); }
+    }
+    return true;
+  }
+};
+
+/* ========================= 11. BRAIN ========================= */
+const Greetings={
+  line(){
+    const h=new Date().getHours();
+    const nm=S.profile.name;
+    if(h<5)   return t({hi_en:`Late night hai ${nm}. Main yahin hoon.`,en:`It's late, ${nm}. I'm here.`,hi:`देर रात है ${nm}। मैं यहाँ हूँ।`});
+    if(h<12)  return t({hi_en:`Good morning ${nm}!`,en:`Good morning, ${nm}!`,hi:`सुप्रभात ${nm}!`});
+    if(h<17)  return t({hi_en:`Good afternoon ${nm}.`,en:`Good afternoon, ${nm}.`,hi:`नमस्कार ${nm}।`});
+    if(h<21)  return t({hi_en:`Good evening ${nm}.`,en:`Good evening, ${nm}.`,hi:`शुभ संध्या ${nm}।`});
+    return t({hi_en:`Good night ${nm}.`,en:`Good night, ${nm}.`,hi:`शुभ रात्रि ${nm}।`});
+  }
+};
+
+const Brain={
+  busy:false,
+
+  /* ---------- helpers ---------- */
+  reply(text, kind){
+    UI.say(text, kind);
+    Memory.push({role:'robert',text:String(text).replace(/<[^>]+>/g,'')});
+    return text;
+  },
+  async confirmDestructive(title, body){
+    return await Modal.confirm({tag:'Destructive action', title, body, ok:'Confirm', cancel:'Cancel', danger:true});
+  },
+
+  /* ---------- normalization ---------- */
+  norm(s){
+    return String(s).toLowerCase()
+      .replace(/[“”"'`]/g,'')
+      .replace(/\s+/g,' ')
+      .trim();
+  },
+
+  /* ---------- duration parser ---------- */
+  parseDuration(str){
+    const s=this.norm(str);
+    let total=0, found=false, m;
+    const re=/(\d+(?:\.\d+)?)\s*(hours?|hrs?|h|घंटे|घंटा|minutes?|mins?|min|मिनट|seconds?|secs?|sec|s|सेकंड)\b/g;
+    while((m=re.exec(s))){
+      const v=parseFloat(m[1]), u=m[2];
+      found=true;
+      if(/^h|hour|घंट/.test(u)) total+=v*3600;
+      else if(/^s|sec|सेकंड/.test(u)) total+=v;
+      else total+=v*60;
+    }
+    if(!found){
+      if(/half an hour|aadha ghanta|आधा घंटा/.test(s)){ total=1800; found=true; }
+      else if(/one minute|ek minute|एक मिनट/.test(s)){ total=60; found=true; }
+      else if(/do minute|two minutes|2 minute/.test(s)){ total=120; found=true; }
+    }
+    if(!found){
+      const n=s.match(/\b(\d{1,3})\b/);
+      if(n){ total=parseInt(n[1],10)*60; found=true; }
+    }
+    return found&&total>0?total:null;
+  },
+
+  prettyDur(sec){
+    if(sec>=3600){ const h=Math.floor(sec/3600), m=Math.round((sec%3600)/60); return m? `${h}h ${m}m` : `${h}h`; }
+    if(sec>=60) return `${Math.round(sec/60)} min`;
+    return `${Math.round(sec)} sec`;
+  },
+
+  defaultCity(){ return S.profile.timezone && S.profile.timezone.includes('Kolkata') ? 'Delhi' : ''; },
+
+  /* ---------- MAIN ---------- */
+  async process(rawText){
+    const text=String(rawText||'').trim();
+    if(!text) return;
+    if(this.busy){ /* queue-free: allow overlap but log */ }
+    this.busy=true;
+
+    UI.addMessage('user',text);
+    Memory.push({role:'user',text});
+    Voice.stopSpeaking();
+    UI.setState('thinking');
+
+    const typing=UI.showTyping();
+    await sleep(210);
+
+    try{
+      await this.dispatch(text);
+    }catch(e){
+      Log.add('error','Brain: '+e.message);
+      typing.remove();
+      this.reply(t({
+        hi_en:'Sir, is command ko process karte waqt error aaya: '+esc(e.message)+'.',
+        en:'I hit an error processing that: '+esc(e.message)+'.',
+        hi:'उस कमांड को संसाधित करते समय त्रुटि हुई: '+esc(e.message)+'।'
+      }),'error');
+    }
+    try{ typing.remove(); }catch(e){}
+    this.busy=false;
+    if(!Voice.speaking) UI.setState(UI.listeningState());
+  },
+
+  async dispatch(raw){
+    const text=raw.trim();
+    const tl=this.norm(text);
+    /* strip leading assistant name */
+    const ww=(S.profile.wakeWord||'robert').toLowerCase();
+    let t=tl.replace(new RegExp('^(hey |ok |okay )?'+ww+'[,\\s]*'),'').trim();
+    if(!t) t=tl;
+
+    let m;
+
+    /* ---------- 0. USER-CREATED COMMANDS ---------- */
+    for(const c of S.memory.customCommands){
+      if(c.trigger && t.includes(this.norm(c.trigger))){
+        Log.add('system','Custom command matched: '+c.trigger);
+        this.reply(c.response || t({en:'Done.',hi:'हो गया।',hi_en:'Ho gaya.'}));
+        return;
+      }
+    }
+
+    /* ---------- 0b. ROUTINES ---------- */
+    for(const r of S.memory.routines){
+      if(r.trigger && t.includes(this.norm(r.trigger))){
+        await Automation.runRoutine(r);
+        return;
+      }
+    }
+
+    /* ---------- 1. STOP / SLEEP ---------- */
+    if(/^(stop|chup|quiet|silence|shut up|band karo|bas karo|never ?mind|cancel)$/.test(t)){
+      Voice.stopSpeaking();
+      this.reply(t({hi_en:'Theek hai sir, ruk gaya.',en:'Understood, standing by.',hi:'ठीक है, रुक गया।'}));
+      return;
+    }
+    if(/(stop listening|listening band|mic band|so jao|sleep mode|deactivate)/.test(t)){
+      Voice.stop();
+      this.reply(t({hi_en:'Microphone band kar diya. Jab zarurat ho, mic button dabaayein.',en:'Microphone disabled. Tap the mic button whenever you need me.',hi:'माइक्रोफ़ोन बंद कर दिया। ज़रूरत पड़ने पर माइक बटन दबाएँ।'}));
+      return;
+    }
+
+    /* ---------- 2. HELP ---------- */
+    if(/^(help|madad|commands?|kya kar sakte ho|what can you do|capabilities|features)$/.test(t) || /\b(help me|madad karo|show commands)\b/.test(t)){
+      this.reply(t({
+        hi_en:'Main ye kaam kar sakta hoon, sir:\n• <b>Apps/Web</b> — “open youtube”, “google karo best laptops”\n• <b>Weather</b> — “mausam batao Delhi” (live API)\n• <b>Calculation</b> — “calculate 1450 * 12 / 100”\n• <b>Timers</b> — “10 minute ka timer lagao”\n• <b>Reminders</b> — “remind me to call mom at 6 pm”\n• <b>Tasks</b> — “add task submit report”, “show tasks”\n• <b>Notes</b> — “note down meeting at 4”, “show notes”\n• <b>Routines</b> — “start study mode”, “good morning”\n• <b>System</b> — “status report”, “kya time hua”\n\nSettings panel se permissions, wake word aur voice control kar sakte hain.',
+        en:'Here is what I can do:\n• <b>Apps/Web</b> — “open youtube”, “search for best laptops”\n• <b>Weather</b> — “weather in Delhi” (live API)\n• <b>Math</b> — “calculate 1450 * 12 / 100”\n• <b>Timers</b> — “set a 10 minute timer”\n• <b>Reminders</b> — “remind me to call mom at 6 pm”\n• <b>Tasks</b> — “add task submit report”, “show tasks”\n• <b>Notes</b> — “note down meeting at 4”, “show notes”\n• <b>Routines</b> — “start study mode”, “good morning”\n• <b>System</b> — “status report”, “what time is it”',
+        hi:'मैं ये कार्य कर सकता हूँ।'
+      }));
+      return;
+    }
+
+    /* ---------- 3. GREETINGS ---------- */
+    if(/^(hi|hello|hey|yo|namaste|namaskar|salaam|good morning|good afternoon|good evening|good night|sup|robert)$/.test(t)){
+      this.reply(Greetings.line()+' '+t({hi_en:'Kya kaam karna hai?',en:'What would you like to do?',hi:'क्या करना है?'}));
+      return;
+    }
+    if(/^(good morning|gm|subah bakhair)/.test(t)){
+      this.reply(t({hi_en:'Good morning '+S.profile.name+'! Aaj ka plan banaayein?',en:'Good morning '+S.profile.name+'! Shall we plan the day?',hi:'सुप्रभात '+S.profile.name+'! दिन की योजना बनाएँ?'}));
+      if(S.profile.proactive) await this.agenda();
+      return;
+    }
+    if(/(thank you|thanks|shukriya|dhanyavad|thank u)/.test(t)){
+      this.reply(t({hi_en:'Koi baat nahi sir. Main yahin hoon.',en:'Always a pleasure. I am here.',hi:'कोई बात नहीं। मैं यहाँ हूँ।'}));
+      return;
+    }
+    if(/^(bye|goodbye|alvida|chalta hoon|good night)$/.test(t)){
+      this.reply(t({hi_en:'Alvida sir. Zarurat pade to awaaz dijiye.',en:'Goodbye. Call whenever you need me.',hi:'अलविदा। ज़रूरत पड़े तो आवाज़ दीजिए।'}));
+      return;
+    }
+    if(/(who are you|tum kaun ho|aap kaun ho|what are you|tumhara naam)/.test(t)){
+      this.reply(t({
+        hi_en:`Main <b>ROBERT</b> hoon — aapka personal AI assistant. Modular skills ke saath: VOICE, BRAIN, TOOLS, PRODUCTIVITY, AUTOMATION aur SETTINGS. Har sensitive action aapki permission ke baad hi hota hai.`,
+        en:`I am <b>ROBERT</b> — your personal AI assistant. Built from modular skills: VOICE, BRAIN, TOOLS, PRODUCTIVITY, AUTOMATION and SETTINGS. Every sensitive action requires your permission first.`,
+        hi:`मैं <b>ROBERT</b> हूँ — आपका व्यक्तिगत एआई सहायक।`
+      }));
+      return;
+    }
+
+    /* ---------- 4. STATUS ---------- */
+    if(/(system status|status report|diagnostics|diagnostic|system check|status batao|sab theek)/.test(t)){
+      const r=await Tools.run('system.status');
+      if(r.ok){
+        const d=r.data;
+        this.reply(t({
+          hi_en:`<b>System report</b>\n• Voice engine: ${d.voice}\n• Wake word: ${d.wakeWord}\n• Voice output: ${d.voiceOut}\n• Brain: ${d.brain}\n• Tools registered: ${d.tools}\n• Native shell: ${d.native}\n• Pending tasks: ${d.tasks}\n• Active reminders: ${d.reminders}\n• Notes stored: ${d.notes}`,
+          en:`<b>System report</b>\n• Voice engine: ${d.voice}\n• Wake word: ${d.wakeWord}\n• Voice output: ${d.voiceOut}\n• Brain: ${d.brain}\n• Tools registered: ${d.tools}\n• Native shell: ${d.native}\n• Pending tasks: ${d.tasks}\n• Active reminders: ${d.reminders}\n• Notes stored: ${d.notes}`
+        }));
+      }
+      return;
+    }
+
+    /* ---------- 5. TIMER (before time) ---------- */
+    if(/\btimer\b|countdown|count down/.test(t)){
+      const sec=this.parseDuration(t);
+      if(!sec){
+        this.reply(t({hi_en:'Kitne samay ka timer lagau? Jaise — “10 minute ka timer lagao”.',en:'How long should the timer run? For example — “set a 10 minute timer”.'}));
+        return;
+      }
+      const label=(t.match(/(?:for|named|called|ka)\s+([a-z\s]{3,26})$/i)||[])[1];
+      Scheduler.startTimer(sec, label?label.trim():'');
+      this.reply(t({
+        hi_en:`⏱️ Timer set — <b>${this.prettyDur(sec)}</b>${label?` (${label.trim()})`:''}. Samay poora hone par bata dunga.`,
+        en:`⏱️ Timer set for <b>${this.prettyDur(sec)}</b>${label?` (${label.trim()})`:''}. I will alert you when it ends.`,
+        hi:`⏱️ टाइमर सेट — <b>${this.prettyDur(sec)}</b>।`
+      }));
+      return;
+    }
+
+    /* ---------- 6. REMINDERS ---------- */
+    if(/\bremind(er)?\b|yaad dila|reminder lagao/.test(t)){
+      const mm=t.match(/remind(?:er)?\s*(?:me|mujhe)?\s*(?:to|that|about|for|ki|karo|kar do)?\s*(.+)/);
+      if(!mm){
+        this.reply(t({hi_en:'Kya yaad dilana hai aur kab? Jaise — “remind me to call mom at 6 pm”.',en:'What should I remind you about, and when? e.g. “remind me to call mom at 6 pm”.'}));
+        return;
+      }
+      let tail=mm[1].trim();
+      let when=null, label=tail;
+
+      const inM=tail.match(/\bin\s+(\d+(?:\.\d+)?)\s*(seconds?|secs?|sec|s|minutes?|mins?|min|m|hours?|hrs?|h)\b/);
+      const atM=tail.match(/\bat\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b|\b(\d{1,2})\s*(am|pm)\b/);
+      const tmM=tail.match(/\b(tomorrow|kal)\b/);
+
+      if(inM){
+        const sec=this.parseDuration(inM[0]);
+        if(sec){ when=new Date(Date.now()+sec*1000); label=tail.replace(inM[0],'').trim(); }
+      } else if(atM){
+        const hourStr=atM[1]||atM[4];
+        const minStr=atM[2]||'0';
+        const ap=(atM[3]||atM[5]||'').toLowerCase();
+        let hh=parseInt(hourStr,10), mi=parseInt(minStr,10);
+        if(ap==='pm'&&hh<12) hh+=12;
+        if(ap==='am'&&hh===12) hh=0;
+        const d=new Date(); d.setHours(hh,mi,0,0);
+        if(tmM) d.setDate(d.getDate()+1);
+        if(d.getTime()<=Date.now()) d.setDate(d.getDate()+1);
+        when=d;
+        label=tail.replace(atM[0],'').trim();
+      }
+
+      if(!when){
+        this.reply(t({hi_en:'Samay clear nahi hai. “at 6 pm” ya “in 20 minutes” boliye.',en:'I need a clearer time — try “at 6 pm” or “in 20 minutes”.'}));
+        return;
+      }
+      label=label.replace(/^(to|that|about|ki|karo)\s+/i,'').replace(/\s+/g,' ').trim() || 'Reminder';
+      const rec={id:uid(), text:label, at:when.getTime(), fired:false};
+      S.memory.reminders.push(rec); save(); Scheduler.scheduleReminder(rec); UI.renderTab();
+      this.reply(t({
+        hi_en:`🔔 Reminder set — <b>${esc(label)}</b> · ${when.toLocaleString([],{weekday:'short',hour:'2-digit',minute:'2-digit'})}`,
+        en:`🔔 Reminder set — <b>${esc(label)}</b> · ${when.toLocaleString([],{weekday:'short',hour:'2-digit',minute:'2-digit'})}`,
+        hi:`🔔 रिमाइंडर सेट — <b>${esc(label)}</b>`
+      }));
+      if(!PermissionManager.isAllowed('notifications') && PermissionManager.level('notifications')==='ask'){
+        /* silent — user can enable in Access tab */
+      }
+      return;
+    }
+
+    /* ---------- 7. NOTES ---------- */
+    if(/^(show|list|read|dikhao)?\s*(my\s+)?notes?$/.test(t) || /(show|list|read|dikhao).{0,12}(notes?|नोट्स)/.test(t)){
+      const notes=S.memory.notes;
+      if(!notes.length) this.reply(t({hi_en:'Abhi koi note save nahi hai.',en:'You have no saved notes yet.'}));
+      else this.reply(t({hi_en:`<b>Notes (${notes.length})</b>\n`,en:`<b>Notes (${notes.length})</b>\n`})+
+        notes.map((n,i)=>`${i+1}. ${esc(n.text)}`).join('\n'));
+      return;
+    }
+    if(/(delete|clear|remove|hatao|saaf).{0,10}notes?/.test(t)){
+      if(!S.memory.notes.length){ this.reply(t({hi_en:'Note list already khaali hai.',en:'Your notes are already empty.'})); return; }
+      const ok=await this.confirmDestructive('Clear all notes?', `This permanently deletes <b>${S.memory.notes.length}</b> note(s). This cannot be undone.`);
+      if(!ok){ this.reply(t({hi_en:'Cancel kar diya. Notes safe hain.',en:'Cancelled. Your notes are safe.'})); return; }
+      S.memory.notes=[]; save(); UI.renderTab();
+      this.reply(t({hi_en:'Sabhi notes delete kar diye.',en:'All notes deleted.'}));
+      return;
+    }
+    if((m=t.match(/^(?:note|note down|make a note|likh lo|likh le|jot down|save note)\b[:\-]?\s*(.+)$/))){
+      const body=m[1].trim();
+      S.memory.notes.unshift({id:uid(),text:body,ts:Date.now()});
+      save(); UI.renderTab();
+      this.reply(t({hi_en:`📝 Note save ho gaya: “${esc(body)}”`,en:`📝 Note saved: “${esc(body)}”`,hi:`📝 नोट सेव: “${esc(body)}”`}));
+      return;
+    }
+
+    /* ---------- 8. TASKS ---------- */
+    if(/^(tasks?|todos?|to-?do list|kaam)$/.test(t) || /(show|list|dikhao|read).{0,14}(tasks?|todos?|kaam)/.test(t) || /(pending|baaki).{0,10}(tasks?|kaam)/.test(t)){
+      await this.listTasks(false);
+      return;
+    }
+    if((m=t.match(/^(?:add|create|new|naya|nayi)\s+(?:task|todo|kaam)\s*[:\-]?\s*(.+)$/)) ||
+       (m=t.match(/^(?:task|todo)\s*[:\-]\s*(.+)$/))){
+      const body=m[1].trim();
+      S.memory.tasks.unshift({id:uid(),text:body,done:false,ts:Date.now()});
+      save(); UI.renderTab();
+      const pending=S.memory.tasks.filter(x=>!x.done).length;
+      this.reply(t({hi_en:`✅ Task add ho gaya: “${esc(body)}” · kul pending: ${pending}`,en:`✅ Task added: “${esc(body)}” · ${pending} pending`,hi:`✅ कार्य जोड़ा गया: “${esc(body)}”`}));
+      return;
+    }
+    if((m=t.match(/(?:complete|done|finish|mark done|kar diya|poora)\s*(?:task)?\s*#?(\d+)/))){
+      const idx=parseInt(m[1],10)-1;
+      const task=S.memory.tasks.filter(x=>!x.done)[idx];
+      if(!task){ this.reply(t({hi_en:'Us number ka koi pending task nahi mila.',en:'No pending task with that number.'})); return; }
+      task.done=true; save(); UI.renderTab();
+      this.reply(t({hi_en:`✅ “${esc(task.text)}” complete mark kar diya.`,en:`✅ Marked “${esc(task.text)}” as complete.`}));
+      return;
+    }
+    if((m=t.match(/(?:delete|remove|hatao)\s+(?:task)?\s*#?(\d+)/))){
+      const idx=parseInt(m[1],10)-1;
+      const task=S.memory.tasks[idx];
+      if(!task){ this.reply(t({hi_en:'Us number ka task nahi mila.',en:'No task with that number.'})); return; }
+      const ok=await this.confirmDestructive('Delete task?',`“${esc(task.text)}” will be permanently removed.`);
+      if(!ok){ this.reply(t({hi_en:'Task delete nahi kiya.',en:'Task not deleted.'})); return; }
+      S.memory.tasks.splice(idx,1); save(); UI.renderTab();
+      this.reply(t({hi_en:'Task delete kar diya.',en:'Task deleted.'}));
+      return;
+    }
+    if(/(clear|saaf|hatao).{0,10}(all )?(tasks?|kaam)/.test(t)){
+      if(!S.memory.tasks.length){ this.reply(t({hi_en:'Task list khaali hai.',en:'Your task list is empty.'})); return; }
+      const ok=await this.confirmDestructive('Clear all tasks?',`This deletes <b>${S.memory.tasks.length}</b> task(s) permanently.`);
+      if(!ok){ this.reply(t({hi_en:'Cancel.',en:'Cancelled.'})); return; }
+      S.memory.tasks=[]; save(); UI.renderTab();
+      this.reply(t({hi_en:'Task list clear kar di.',en:'Task list cleared.'}));
+      return;
+    }
+
+    /* ---------- 9. WEATHER ---------- */
+    if(/\b(weather|mausam|temperature|barish|rain|garmi|thand)\b/.test(t)){
+      let city=null;
+      const cm=t.match(/(?:weather|mausam|temperature)\s*(?:in|of|ka|ki|mein|at)?\s*([a-z\s]{2,26})$/i);
+      if(cm) city=cm[1].trim();
+      if(!city) city=this.defaultCity();
+      if(!city){
+        this.reply(t({hi_en:'Kis sheher ka mausam? Jaise — “mausam batao Delhi”.',en:'Weather for which city? e.g. “weather in Delhi”.'}));
+        return;
+      }
+      await this.weatherFlow(city);
+      return;
+    }
+
+    /* ---------- 10. TIME / DATE ---------- */
+    if(/^(time|samay)$/.test(t) || /\b(what.{0,6}(time|samay)|time kya|kitne baje|samay kya|current time|abhi kitna baje)\b/.test(t)){
+      const r=await Tools.run('time.now');
+      if(r.ok) this.reply(t({hi_en:`🕐 Abhi <b>${r.data.time}</b> hai.`,en:`🕐 It is currently <b>${r.data.time}</b>.`,hi:`🕐 अभी <b>${r.data.time}</b> है।`}));
+      return;
+    }
+    if(/^(date|tareekh|aaj)$/.test(t) || /\b(what.{0,8}(date|day)|aaj kya din|tareekh kya|today.s date)\b/.test(t)){
+      const r=await Tools.run('time.now');
+      if(r.ok) this.reply(t({hi_en:`📅 Aaj <b>${r.data.date}</b> hai.`,en:`📅 Today is <b>${r.data.date}</b>.`}));
+      return;
+    }
+
+    /* ---------- 11. CALCULATION ---------- */
+    if((m=t.match(/^(?:calc(?:ulate)?|compute|solve|evaluate|kitna hota hai|hisab)\s*[:\-]?\s*(.+)$/)) || /^[\d\s().+\-*/^%x×÷]+$/.test(t)){
+      const expr=m?m[1]:t;
+      const r=await Tools.run('calc.eval',{expr});
+      if(r.ok){
+        const pretty=Number(r.data);
+        this.reply(t({
+          hi_en:`🧮 <code>${esc(expr.trim())}</code> = <b>${pretty.toLocaleString('en-IN',{maximumFractionDigits:6})}</b>`,
+          en:`🧮 <code>${esc(expr.trim())}</code> = <b>${pretty.toLocaleString('en-IN',{maximumFractionDigits:6})}</b>`
+        }));
+      } else {
+        this.reply(t({hi_en:'Sir, ye expression parse nahi ho paya. Jaise likhein — “calculate 25 * 18 + 7”.',en:'I could not parse that expression. Try — “calculate 25 * 18 + 7”.'}));
+      }
+      return;
+    }
+
+    /* ---------- 12. SEARCH ---------- */
+    if((m=t.match(/^(?:search|google|dhundo|khojo|find|look up|search for|google karo)\s*(?:for|par|pe)?\s*(.+)$/))){
+      let q=m[1].trim();
+      let engine='google';
+      if(/^youtube\s+(?:par|pe|for|mein)?\s*/.test(q)){ engine='youtube'; q=q.replace(/^youtube\s+(?:par|pe|for|mein)?\s*/,''); }
+      if(/^amazon\s+(?:par|pe|for|mein)?\s*/.test(q)){ engine='amazon'; q=q.replace(/^amazon\s+(?:par|pe|for|mein)?\s*/,''); }
+      if(/^wikipedia\s+(?:par|pe|for|mein)?\s*/.test(q)){ engine='wikipedia'; q=q.replace(/^wikipedia\s+(?:par|pe|for|mein)?\s*/,''); }
+      if(!q){ this.reply(t({hi_en:'Kya search karna hai?',en:'What should I search for?'})); return; }
+      const r=await Tools.run('web.search',{q,engine});
+      if(r.ok) this.reply(t({
+        hi_en:`🔎 ${engine.toUpperCase()} par “${esc(q)}” search kar raha hoon — naya tab khul gaya.`,
+        en:`🔎 Searching ${engine.toUpperCase()} for “${esc(q)}” — a new tab just opened.`,
+        hi:`🔎 ${engine.toUpperCase()} पर “${esc(q)}” खोजा जा रहा है।`
+      }));
+      else if(r.error==='POPUP_BLOCKED') this.reply(t({hi_en:'Browser ne popup block kar diya. Popups allow kijiye, phir boliye.',en:'Your browser blocked the popup. Please allow popups and try again.'}));
+      else if(r.error!=='PERMISSION_DENIED') this.reply(t({hi_en:'Search nahi ho paya.',en:'Search failed.'}),'error');
+      return;
+    }
+
+    /* ---------- 13. OPEN APP / SITE ---------- */
+    if((m=t.match(/^(?:open|launch|start|kholo|khol do|khol|chalu karo)\s+(.+)$/))){
+      let target=m[1].trim().replace(/\s+(website|site|app|application|par|pe|mein)$/,'').trim();
+      /* native OS launch attempt first */
+      if(Bridge.available){
+        const ok=await PermissionManager.check('system','launch application “'+target+'”');
+        if(ok){
+          try{ await Bridge.call('launchApp',{name:target});
+               this.reply(t({hi_en:`🖥️ “${esc(target)}” launch kar diya.`,en:`🖥️ Launched “${esc(target)}”.`}));
+               return;
+          }catch(e){ /* fall through to web */ }
+        }
+      }
+      const r=await Tools.run('web.open',{target});
+      if(r.ok){
+        this.reply(t({
+          hi_en:`🌐 “${esc(target)}” khol diya naye tab mein.`,
+          en:`🌐 Opened “${esc(target)}” in a new tab.`,
+          hi:`🌐 “${esc(target)}” नए टैब में खोला।`
+        }));
+      } else if(r.error==='POPUP_BLOCKED'){
+        this.reply(t({hi_en:'Popup block ho gaya — browser mein is site ke liye popups allow kijiye.',en:'The popup was blocked — please allow popups for this site.'}));
+      } else if(r.error==='UNKNOWN_TARGET'){
+        if(!Bridge.available){
+          await this.replyNativeLimitation(target);
+        } else {
+          this.reply(t({hi_en:`“${esc(target)}” launch nahi ho paya. Naam check kijiye.`,en:`I could not launch “${esc(target)}”. Please check the name.`}),'error');
+        }
+      }
+      return;
+    }
+
+    /* ---------- 14. VISION ---------- */
+    if(/\b(camera|vision|dekh|dekho|snapshot|selfie|webcam)\b/.test(t) && /(open|start|chalu|show|use|activate|kholo)/.test(t)){
+      await Tools.run('vision.snapshot');
+      return;
+    }
+
+    /* ---------- 15. SETTINGS VIA VOICE ---------- */
+    if((m=t.match(/(?:set|change|switch)\s+(?:the\s+)?language\s+to\s+(english|hindi|hinglish)/))){
+      S.profile.language=m[1]; Voice.rec && (Voice.rec.lang=Voice.recLang());
+      save(); UI.renderTab(); UI.renderPills();
+      this.reply(`Language set to <b>${m[1].toUpperCase()}</b>.`+(m[1]==='hindi'?' हिंदी में बात करूँगा।':''));
+      return;
+    }
+    if(/\b(mute|voice off|chup raho|silent mode|awaaz band)\b/.test(t)){
+      S.profile.voice.enabled=false; Voice.stopSpeaking(); save(); UI.renderTab(); UI.renderPills();
+      UI.addMessage('robert','🔇 Voice output muted. I will respond in text only.');
+      Log.add('voice','Voice output muted by user');
+      return;
+    }
+    if(/\b(unmute|voice on|awaaz chalu|speak again|bolo)\b/.test(t)){
+      S.profile.voice.enabled=true; save(); UI.renderTab(); UI.renderPills();
+      this.reply(t({hi_en:'🔊 Voice output wapas on.',en:'🔊 Voice output enabled again.'}));
+      return;
+    }
+    if((m=t.match(/(?:set|change)\s+(?:the\s+)?wake\s*word\s+to\s+([a-z\s]{2,18})/))){
+      const w=m[1].trim();
+      S.profile.wakeWord=w; save(); UI.renderTab(); UI.renderChips();
+      this.reply(t({hi_en:`Wake word ab <b>“${esc(w)}”</b> hai.`,en:`Wake word is now <b>“${esc(w)}”</b>.`}));
+      return;
+    }
+    if(/\b(turn on|enable|chalu karo)\b.*\b(proactive|proactive mode)\b/.test(t) || /\bproactive mode on\b/.test(t)){
+      S.profile.proactive=true; save(); UI.renderTab(); UI.renderPills();
+      this.reply(t({hi_en:'Proactive mode ON. Main zarurat se pehle yaad dilata rahunga.',en:'Proactive mode ON. I will surface reminders before they are due.'}));
+      return;
+    }
+    if(/\b(turn off|disable|band karo)\b.*\bproactive\b/.test(t)){
+      S.profile.proactive=false; save(); UI.renderTab(); UI.renderPills();
+      this.reply(t({hi_en:'Proactive mode OFF.',en:'Proactive mode OFF.'}));
+      return;
+    }
+
+    /* ---------- 16. JOKE / SMALL TALK ---------- */
+    if(/\b(joke|hasao|funny|make me laugh|chutkula)\b/.test(t)){
+      const jokes=[
+        t({hi_en:'Programmer ki biwi: “Bazar se ek bread laao, agar ande mile to chhe le aana.” Woh 6 bread le aaya. 😄',en:'A programmer’s wife said: “Get a loaf of bread, and if they have eggs, get six.” He came back with six loaves of bread. 😄'}),
+        t({hi_en:'AI ne doctor se kaha: “Mujhe log mujhse baat karne se darte hain.” Doctor: “Aapke hallucinations ki wajah se.” AI: “Kaunse hallucinations?” 😅',en:'An AI told its doctor: “People are afraid to talk to me.” Doctor: “It’s the hallucinations.” AI: “What hallucinations?” 😅'}),
+        t({hi_en:'Sabse imandar bug woh hota hai jo khud hi report kar deta hai. Mila nahi abhi tak. 🐛',en:'The most honest bug is the one that reports itself. Never found one yet. 🐛'})
+      ];
+      this.reply(jokes[Math.floor(Math.random()*jokes.length)]);
+      return;
+    }
+
+    /* ---------- 17. AGENDA / BRIEFING ---------- */
+    if(/\b(briefing|agenda|daily plan|aaj ka plan|schedule|plan banao|summary)\b/.test(t)){
+      await this.agenda();
+      return;
+    }
+
+    /* ---------- 18. CLEAR CHAT ---------- */
+    if(/\b(clear chat|chat clear|reset conversation|conversation clear)\b/.test(t)){
+      UI.clearTranscript(); Memory.clear();
+      this.reply(t({hi_en:'Conversation clear kar di. Fresh session ready.',en:'Conversation cleared. Fresh session ready.'}));
+      return;
+    }
+
+    /* ---------- 19. LLM FALLBACK ---------- */
+    const handled=await this.llmFallback(text);
+    if(handled) return;
+
+    /* ---------- 20. HONEST FALLBACK ---------- */
+    this.reply(t({
+      hi_en:'Sir, main is command ko samajh nahi paaya. Main ye kar sakta hoon — “open youtube”, “mausam batao Delhi”, “10 minute ka timer”, “add task report likhna”, “status report”. Poori list ke liye “help” boliye.',
+      en:'I could not map that to an action. Try — “open youtube”, “weather in Delhi”, “set a 10 minute timer”, “add task write report”, “status report”. Say “help” for the full list.',
+      hi:'क्षमा कीजिए, मैं यह कमांड नहीं समझ पाया। “help” कहिए।'
+    }));
+  },
+
+  async replyNativeLimitation(target){
+    this.reply(t({
+      hi_en:`Sir, “${esc(target)}” ek desktop application lagti hai. Ye web build sirf browser-level actions kar sakta hai — OS apps launch karne ke liye native shell (desktop build) chahiye.\n\nDo options:\n• Agar iska web version hai, boliye “open ${esc(target)} on web”.\n• Ya main ise web par search kar deta hoon?`,
+      en:`Sir, “${esc(target)}” looks like a desktop application. This web build is limited to browser-level actions — OS-level launching requires the native desktop shell.\n\nTwo options:\n• If a web version exists, say “open ${esc(target)} on web”.\n• Or I can search the web for it.`
+    }));
+    Log.add('error','Native action unavailable: '+target);
+  },
+
+  async listTasks(spoken){
+    const pending=S.memory.tasks.filter(x=>!x.done);
+    const done=S.memory.tasks.filter(x=>x.done);
+    if(!S.memory.tasks.length){
+      this.reply(t({hi_en:'Task list khaali hai. “add task …” bolke add kijiye.',en:'Your task list is empty. Say “add task …” to create one.'}));
+      return;
+    }
+    if(spoken){
+      const lines=pending.length
+        ? pending.map((x,i)=>`${i+1}. ${esc(x.text)}`).join('\n')
+        : t({hi_en:'Koi pending task nahi.',en:'No pending tasks.'});
+      this.reply(t({hi_en:`<b>Pending tasks (${pending.length})</b>\n`,en:`<b>Pending tasks (${pending.length})</b>\n`})+lines);
+      return;
+    }
+    let out=t({hi_en:`<b>Tasks</b> — ${pending.length} pending, ${done.length} done\n`,en:`<b>Tasks</b> — ${pending.length} pending, ${done.length} done\n`});
+    if(pending.length) out+=pending.map((x,i)=>`${i+1}. ${esc(x.text)}`).join('\n');
+    else out+=t({hi_en:'Sab kaam ho gaye. 🎉',en:'Everything is done. 🎉'});
+    this.reply(out);
+  },
+
+  async weatherFlow(city){
+    if(!city){
+      this.reply(t({hi_en:'Kis sheher ka mausam chahiye?',en:'Which city?'}));
+      return;
+    }
+    const r=await Tools.run('web.weather',{city});
+    if(!r.ok){
+      if(r.error==='CITY_NOT_FOUND') this.reply(t({hi_en:`“${esc(city)}” naam ka sheher nahi mila. Spelling check kijiye.`,en:`I could not find a city named “${esc(city)}”. Please check the spelling.`}));
+      else if(r.error==='PERMISSION_DENIED'){}
+      else this.reply(t({hi_en:'Weather service se connect nahi ho paya. Internet check kijiye.',en:'I could not reach the weather service. Please check your connection.'}),'error');
+      return;
+    }
+    const d=r.data;
+    this.reply(t({
+      hi_en:`🌤️ <b>${esc(d.city)}</b> — ${d.desc}\n• Temperature: <b>${d.temp}°C</b> (feels like ${d.feels}°C)\n• Humidity: ${d.humidity}%\n• Wind: ${d.wind} km/h\n<span style="color:#4a5f76;font-size:11px">Live data · Open-Meteo</span>`,
+      en:`🌤️ <b>${esc(d.city)}</b> — ${d.desc}\n• Temperature: <b>${d.temp}°C</b> (feels like ${d.feels}°C)\n• Humidity: ${d.humidity}%\n• Wind: ${d.wind} km/h\n<span style="color:#4a5f76;font-size:11px">Live data · Open-Meteo</span>`
+    }));
+  },
+
+  async agenda(){
+    const pending=S.memory.tasks.filter(x=>!x.done);
+    const reminders=S.memory.reminders.filter(x=>!x.fired).sort((a,b)=>a.at-b.at);
+    const timeR=await Tools.run('time.now');
+    let out=t({hi_en:`<b>Briefing — ${timeR.ok?timeR.data.date:''}</b>\n`,en:`<b>Briefing — ${timeR.ok?timeR.data.date:''}</b>\n`});
+    out+=t({hi_en:`• Pending tasks: ${pending.length}\n`,en:`• Pending tasks: ${pending.length}\n`});
+    if(pending.length) out+=pending.slice(0,4).map((x,i)=>`  ${i+1}. ${esc(x.text)}`).join('\n')+'\n';
+    out+=t({hi_en:`• Upcoming reminders: ${reminders.length}\n`,en:`• Upcoming reminders: ${reminders.length}\n`});
+    if(reminders.length) out+=reminders.slice(0,3).map(r=>`  • ${esc(r.text)} — ${new Date(r.at).toLocaleString([],{hour:'2-digit',minute:'2-digit'})}`).join('\n')+'\n';
+    out+=t({hi_en:'\nKya pehle kaam karna hai?',en:'\nWhat should we tackle first?'});
+    this.reply(out);
+  },
+
+  async llmFallback(text){
+    if(!S.profile.llm.apiKey) return false;
+    const ok=await PermissionManager.check('llm','send this query to the cloud brain');
+    if(!ok) return false;
+    try{
+      UI.setState('thinking');
+      const sys=[
+        `You are ROBERT, a calm, intelligent, concise personal AI assistant for ${S.profile.name}.`,
+        `Reply in ${S.profile.language==='english'?'English':S.profile.language==='hindi'?'Hindi':'Hinglish (Hindi written in Latin script mixed with English)'}.`,
+        `Be brief: answer first, details only if needed. Never claim an action was performed unless a tool confirmed it.`,
+        `Available modules: web open/search, weather, calculator, timers, reminders, tasks, notes, routines, system status.`,
+        `If the user asks for OS-level control, explain that it requires the native desktop shell.`
+      ].join(' ');
+      const msgs=[{role:'system',content:sys},
+        ...Memory.recent(6).map(m=>({role:m.role==='robert'?'assistant':'user',content:m.text})),
+        {role:'user',content:text}];
+      const res=await fetch(S.profile.llm.endpoint,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+S.profile.llm.apiKey},
+        body:JSON.stringify({model:S.profile.llm.model||'gpt-4o-mini',messages:msgs,temperature:.6,max_tokens:320})
+      });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const j=await res.json();
+      const out=j?.choices?.[0]?.message?.content;
+      if(!out) throw new Error('EMPTY_RESPONSE');
+      this.reply(esc(out).replace(/\n/g,'\n'));
+      Log.add('system','Cloud brain responded');
+      return true;
+    }catch(e){
+      Log.add('error','LLM fallback failed: '+e.message);
+      return false;
+    }
+  }
+};
+
+/* ========================= VISION (optional) ========================= */
+const Vision={
+  stream:null,
+  async open(){
+    try{
+      this.stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480},audio:false});
+    }catch(e){
+      throw new Error('CAMERA_UNAVAILABLE');
+    }
+    return await new Promise(resolve=>{
+      Modal.custom({
+        tag:'Vision module',
+        title:'Camera preview',
+        body:`<div id="visionWrap"><video id="visionVideo" autoplay playsinline muted></video></div>
+              <p style="margin:0">This is a <b>local preview only</b>. No frames are uploaded, recorded, or stored. Close the window to release the camera.</p>`,
+        actions:[
+          {label:'Release camera', kind:'danger', onclick:()=>{ Vision.close(); Modal.close(); resolve({released:true}); }}
+        ],
+        onMount:()=>{
+          const v=$('#visionVideo');
+          if(v) v.srcObject=Vision.stream;
+        }
+      });
+    });
+  },
+  close(){
+    if(this.stream){ this.stream.getTracks().forEach(t=>t.stop()); this.stream=null; }
+    Log.add('system','Camera released');
+  }
+};
+
+/* ========================= MODAL ========================= */
+const Modal={
+  root:null,
+  init(){ this.root=$('#modalRoot'); },
+  close(){ if(this.root){ this.root.classList.remove('show'); this.root.innerHTML=''; } },
+  confirm({tag,title,body,ok='Confirm',cancel='Cancel',danger=false}){
+    return new Promise(resolve=>{
+      const r=this.root;
+      r.innerHTML=`
+        <div class="modal-scrim" data-x></div>
+        <div class="modal" role="dialog" aria-modal="true">
+          ${tag?`<div class="tag">${esc(tag)}</div>`:''}
+          <h3>${esc(title)}</h3>
+          <p>${body}</p>
+          <div class="actions">
+            <button class="btn ghost" data-cancel>${esc(cancel)}</button>
+            <button class="btn ${danger?'danger':''}" data-ok>${esc(ok)}</button>
+          </div>
+        </div>`;
+      r.classList.add('show');
+      const done=v=>{ this.close(); resolve(v); };
+      r.querySelector('[data-ok]').onclick=()=>done(true);
+      r.querySelector('[data-cancel]').onclick=()=>done(false);
+      r.querySelector('[data-x]').onclick=()=>done(false);
+      const key=e=>{ if(e.key==='Escape'){ done(false); window.removeEventListener('keydown',key); } };
+      window.addEventListener('keydown',key);
+    });
+  },
+  alert({tag,title,body,ok='Understood'}){
+    return new Promise(resolve=>{
+      const r=this.root;
+      r.innerHTML=`
+        <div class="modal-scrim" data-x></div>
+        <div class="modal" role="dialog" aria-modal="true">
+          ${tag?`<div class="tag">${esc(tag)}</div>`:''}
+          <h3>${esc(title)}</h3>
+          <p>${body}</p>
+          <div class="actions"><button class="btn" data-ok>${esc(ok)}</button></div>
+        </div>`;
+      r.classList.add('show');
+      const done=()=>{ this.close(); resolve(true); };
+      r.querySelector('[data-ok]').onclick=done;
+      r.querySelector('[data-x]').onclick=done;
+    });
+  },
+  custom({tag,title,body,actions=[],onMount}){
+    const r=this.root;
+    r.innerHTML=`
+      <div class="modal-scrim" data-x></div>
+      <div class="modal" role="dialog" aria-modal="true">
+        ${tag?`<div class="tag">${esc(tag)}</div>`:''}
+        <h3>${esc(title)}</h3>
+        <div>${body}</div>
+        <div class="actions" id="modalActions"></div>
+      </div>`;
+    r.classList.add('show');
+    const bar=$('#modalActions');
+    actions.forEach(a=>{
+      const b=document.createElement('button');
+      b.className='btn '+(a.kind==='danger'?'danger':a.kind==='ghost'?'ghost':'');
+      b.textContent=a.label;
+      b.onclick=a.onclick;
+      bar.appendChild(b);
+    });
+    r.querySelector('[data-x]').onclick=()=>{ Vision.close(); this.close(); };
+    if(onMount) onMount();
+  }
+};
+
+/* ========================= PROACTIVE ========================= */
+const Proactive={
+  timer:null, audioCtx:null,
+  start(){
+    clearInterval(this.timer);
+    this.timer=setInterval(()=>this.tick(), 45000);
+  },
+  tick(){
+    if(!S.profile.proactive) return;
+    const now=Date.now();
+    /* upcoming reminders within 10 min */
+    S.memory.reminders.filter(r=>!r.fired && r.at-now>0 && r.at-now<10*60*1000).forEach(r=>{
+      if(!r._warned){ r._warned=true; save();
+        UI.say(t({hi_en:`Sir, ${Math.round((r.at-now)/60000)} minute mein — “${r.text}”.`,en:`Heads up — “${r.text}” in about ${Math.round((r.at-now)/60000)} minute(s).`}));
+      }
+    });
+    /* overdue tasks nudge */
+    const pending=S.memory.tasks.filter(x=>!x.done);
+    const lastNudge=this._lastNudge||0;
+    if(pending.length && now-lastNudge>25*60*1000 && S.memory.messages.length>4){
+      this._lastNudge=now;
+      UI.say(t({hi_en:`Ek chhota reminder — ${pending.length} task pending hain. “show tasks” bolke dekh lijiye.`,en:`Quick nudge — you still have ${pending.length} pending task(s). Say “show tasks” to review.`}));
+    }
+  },
+  chime(){
+    try{
+      if(!this.audioCtx) this.audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      const ctx=this.audioCtx;
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.type='sine'; o.frequency.setValueAtTime(880,ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1320,ctx.currentTime+.14);
+      g.gain.setValueAtTime(.0001,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.14,ctx.currentTime+.02);
+      g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.42);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(); o.stop(ctx.currentTime+.45);
+    }catch(e){}
+  }
+};
+
+/* ========================= 12. REACTOR CANVAS ========================= */
+class Reactor{
+  constructor(canvas){
+    this.c=canvas; this.ctx=canvas.getContext('2d');
+    this.t=0; this.state='idle'; this.energy=.32; this.target=.32;
+    this.particles=Array.from({length:52},()=>({
+      a:Math.random()*Math.PI*2,
+      r:.30+Math.random()*.52,
+      s:(Math.random()*.5+.12)*(Math.random()<.5?-1:1),
+      sz:Math.random()*1.5+.5,
+      o:Math.random()*.5+.2
+    }));
+    this.dpr=1;
+    this.resize();
+    window.addEventListener('resize',()=>this.resize());
+    this.loop=this.loop.bind(this);
+    requestAnimationFrame(this.loop);
+  }
+  resize(){
+    const rect=this.c.getBoundingClientRect();
+    this.dpr=Math.min(window.devicePixelRatio||1,2);
+    this.c.width=Math.max(1,rect.width*this.dpr);
+    this.c.height=Math.max(1,rect.height*this.dpr);
+    this.w=rect.width; this.h=rect.height;
+    this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
+  }
+  setState(s){
+    this.state=s;
+    this.target = s==='listening'?.95 : s==='thinking'?.62 : s==='speaking'?.86 : .32;
+  }
+  loop(){
+    this.t+=1;
+    this.energy += (this.target-this.energy)*.07;
+    const {ctx,w,h}=this;
+    if(!w||!h){ requestAnimationFrame(this.loop); return; }
+    ctx.clearRect(0,0,w,h);
+
+    const cx=w/2, cy=h/2+4;
+    const base=Math.min(w,h)*.30;
+    const e=this.energy;
+    const pulse=.5+.5*Math.sin(this.t*.045);
+    const color = this.state==='listening' ? [0,229,255]
+                : this.state==='thinking'  ? [124,92,255]
+                : this.state==='speaking'  ? [34,224,161]
+                : [0,190,220];
+
+    ctx.save();
+    ctx.translate(cx,cy);
+
+    /* --- outer aura --- */
+    const aura=ctx.createRadialGradient(0,0,base*.25,0,0,base*(2.3+e*.5));
+    aura.addColorStop(0,`rgba(${color[0]},${color[1]},${color[2]},${.16+e*.14})`);
+    aura.addColorStop(.5,`rgba(${color[0]},${color[1]},${color[2]},${.05+e*.05})`);
+    aura.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=aura;
+    ctx.beginPath(); ctx.arc(0,0,base*(2.3+e*.5),0,Math.PI*2); ctx.fill();
+
+    /* --- rotating rings --- */
+    const rings=[
+      {r:base*1.42, sp:.0012, dash:[2,7],  lw:1,   alpha:.42},
+      {r:base*1.18, sp:-.0019,dash:[26,14],lw:1.6, alpha:.62},
+      {r:base*.96,  sp:.0026, dash:[3,5],  lw:1,   alpha:.34}
+    ];
+    rings.forEach((ring,i)=>{
+      ctx.save();
+      ctx.rotate(this.t*ring.sp);
+      ctx.setLineDash(ring.dash);
+      ctx.lineWidth=ring.lw;
+      ctx.strokeStyle=`rgba(${color[0]},${color[1]},${color[2]},${ring.alpha*(.55+e*.55)})`;
+      ctx.beginPath(); ctx.arc(0,0,ring.r,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    });
+
+    /* --- waveform bars ring --- */
+    const bars=64;
+    ctx.save();
+    for(let i=0;i<bars;i++){
+      const ang=(i/bars)*Math.PI*2 - Math.PI/2;
+      const amp = e*(.5+.5*Math.sin(this.t*.09 + i*.42))*(.45+.55*pulse);
+      const r1=base*(1.02+amp*.34);
+      const r2=base*(1.06+amp*.78);
+      const a=.14+amp*.72;
+      ctx.strokeStyle=`rgba(${color[0]},${color[1]},${color[2]},${a})`;
+      ctx.lineWidth=1.7;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(ang)*r1, Math.sin(ang)*r1);
+      ctx.lineTo(Math.cos(ang)*r2, Math.sin(ang)*r2);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    /* --- particles --- */
+    this.particles.forEach(p=>{
+      p.a += p.s*.012*(1+e);
+      const pr=(p.r+Math.sin(this.t*.016+p.a*3)*.03)*base*1.3;
+      const x=Math.cos(p.a)*pr, y=Math.sin(p.a)*pr*.72;
+      ctx.fillStyle=`rgba(${color[0]},${color[1]},${color[2]},${p.o*(.4+e*.6)})`;
+      ctx.beginPath(); ctx.arc(x,y,p.sz*(1+e*.5),0,Math.PI*2); ctx.fill();
+    });
+
+    /* --- core --- */
+    const cr=base*(.44+.06*pulse+e*.16);
+    const core=ctx.createRadialGradient(0,0,0,0,0,cr*1.5);
+    core.addColorStop(0,`rgba(255,255,255,${.72+e*.25})`);
+    core.addColorStop(.32,`rgba(${Math.min(255,color[0]+90)},${Math.min(255,color[1]+90)},${Math.min(255,color[2]+90)},${.6+e*.35})`);
+    core.addColorStop(.72,`rgba(${color[0]},${color[1]},${color[2]},${.22+e*.3})`);
+    core.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=core;
+    ctx.beginPath(); ctx.arc(0,0,cr*1.5,0,Math.PI*2); ctx.fill();
+
+    ctx.strokeStyle=`rgba(255,255,255,${.28+e*.4})`;
+    ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.arc(0,0,cr*.62,0,Math.PI*2); ctx.stroke();
+
+    /* hex tick marks */
+    ctx.save();
+    ctx.rotate(-this.t*.004);
+    for(let i=0;i<12;i++){
+      const ang=(i/12)*Math.PI*2;
+      const rr=base*(1.62+.05*Math.sin(this.t*.05+i));
+      ctx.fillStyle=`rgba(${color[0]},${color[1]},${color[2]},${.22+e*.4})`;
+      ctx.fillRect(Math.cos(ang)*rr-1, Math.sin(ang)*rr-1, 2.4, 2.4);
+    }
+    ctx.restore();
+
+    ctx.restore();
+    requestAnimationFrame(this.loop);
+  }
+}
+
+/* ========================= 13. UI ========================= */
+const UI={
+  state:'idle', reactor:null, typingEl:null, interim:'', tab:'profile',
+
+  init(){
+    this.reactor=new Reactor($('#orb'));
+    this.attachEvents();
+    this.renderModules();
+    this.renderQuick();
+    this.renderChips();
+    this.renderSysInfo();
+    this.renderTab();
+    this.renderPills();
+    this.setState('idle');
+    setInterval(()=>{
+      const el=$('#clock');
+      if(el) el.textContent=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    },1000);
+  },
+
+  attachEvents(){
+    $('#sendBtn').onclick=()=>this.submit();
+    $('#micBtn').onclick=()=>{
+      if(S.profile.wakeWordEnabled) Voice.toggle('wake');
+      else Voice.toggle('ptt');
+    };
+    $('#inp').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); this.submit(); } });
+    $('#btnLeft').onclick=()=>this.openDrawer('left');
+    $('#btnRight').onclick=()=>this.openDrawer('right');
+    $('#scrim').onclick=()=>this.closeDrawers();
+    $$('[data-close]').forEach(b=>b.onclick=()=>this.closeDrawers());
+    $$('#tabs .tab').forEach(b=>b.onclick=()=>{
+      $$('#tabs .tab').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); this.tab=b.dataset.tab; this.renderTab();
+    });
+    document.addEventListener('keydown',e=>{
+      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='m'){ e.preventDefault(); $('#micBtn').click(); }
+      if((e.ctrlKey||e.metaKey)&&e.key==='/' ){ e.preventDefault(); $('#inp').focus(); }
+    });
+    /* delegated bindings inside right panel */
+    $('#tabBody').addEventListener('input',e=>this.onField(e));
+    $('#tabBody').addEventListener('change',e=>this.onField(e));
+    $('#tabBody').addEventListener('click',e=>this.onClick(e));
+  },
+
+  openDrawer(side){
+    const el=side==='left'?$('#leftPanel'):$('#rightPanel');
+    el.classList.add('open'); $('#scrim').classList.add('show');
+  },
+  closeDrawers(){
+    $('#leftPanel').classList.remove('open');
+    $('#rightPanel').classList.remove('open');
+    $('#scrim').classList.remove('show');
+  },
+
+  submit(){
+    const inp=$('#inp');
+    const v=inp.value.trim();
+    if(!v) return;
+    inp.value='';
+    Brain.process(v);
+  },
+
+  /* ---------- transcript ---------- */
+  addMessage(role,text,kind){
+    const tr=$('#transcript');
+    const el=document.createElement('div');
+    el.className='msg '+role+(kind==='error'?' error':'');
+    const initials = role==='user' ? (S.profile.name||'You').slice(0,2).toUpperCase()
+                   : role==='system' ? 'SYS' : 'R';
+    el.innerHTML=`
+      <div class="avatar">${esc(initials)}</div>
+      <div class="bubble">
+        <div class="meta">${role==='user'?esc(S.profile.name||'You'):role==='system'?'System':'ROBERT'} · ${nowHHMM()}</div>
+        <div class="txt">${text}</div>
+      </div>`;
+    tr.appendChild(el);
+    while(tr.children.length>220) tr.removeChild(tr.firstChild);
+    this.scrollBottom();
+    return el;
+  },
+
+  say(text, kind){
+    const el=this.addMessage('robert',text,kind);
+    Voice.speak(String(text).replace(/<[^>]+>/g,' '));
+    return el;
+  },
+
+  showTyping(){
+    const tr=$('#transcript');
+    const el=document.createElement('div');
+    el.className='msg robert';
+    el.innerHTML=`
+      <div class="avatar">R</div>
+      <div class="bubble"><div class="meta">ROBERT · processing</div>
+      <div class="typing"><span></span><span></span><span></span></div></div>`;
+    tr.appendChild(el);
+    this.scrollBottom();
+    return el;
+  },
+
+  clearTranscript(){ $('#transcript').innerHTML=''; },
+
+  scrollBottom(){
+    const tr=$('#transcript');
+    requestAnimationFrame(()=>{ tr.scrollTop=tr.scrollHeight; });
+  },
+
+  setInterim(txt){
+    this.interim=txt||'';
+    const el=$('#inp');
+    if(txt) el.placeholder='🎙 '+txt.slice(0,70);
+    else el.placeholder='Type a command…  e.g. “open youtube”, “5 minute ka timer lagao”';
+  },
+
+  flashWake(){
+    const h=$('#orbHolder');
+    h.classList.remove('flash'); void h.offsetWidth; h.classList.add('flash');
+  },
+
+  listeningState(){
+    if(Voice.listening) return 'listening';
+    return 'idle';
+  },
+
+  setState(s){
+    this.state=s;
+    if(this.reactor) this.reactor.setState(s);
+    const labels={
+      idle: t({hi_en:'STANDBY',en:'STANDBY',hi:'तैयार'}),
+      listening: t({hi_en:'LISTENING',en:'LISTENING',hi:'सुन रहा हूँ'}),
+      thinking: t({hi_en:'PROCESSING',en:'PROCESSING',hi:'सोच रहा हूँ'}),
+      speaking: t({hi_en:'SPEAKING',en:'SPEAKING',hi:'बोल रहा हूँ'})
+    };
+    const m=$('#orbMode');
+    if(m) m.textContent=labels[s]||'STANDBY';
+    const l=$('#orbLabel');
+    if(l){
+      if(s==='idle') l.innerHTML = S.profile.wakeWordEnabled
+        ? `SAY <b>“${esc((S.profile.wakeWord||'robert').toUpperCase())}”</b> TO ACTIVATE`
+        : `TAP THE MIC OR TYPE A COMMAND`;
+      else if(s==='listening') l.innerHTML = Voice.awake ? `<b>LISTENING…</b> SPEAK NOW` : `WAITING FOR WAKE WORD`;
+      else if(s==='thinking') l.innerHTML = `ANALYSING INTENT…`;
+      else if(s==='speaking') l.innerHTML = `RESPONDING…`;
+    }
+    this.updateMic();
+  },
+
+  updateMic(){
+    const b=$('#micBtn');
+    if(!b) return;
+    b.classList.remove('live','wake');
+    if(Voice.listening){
+      if(Voice.mode==='wake') b.classList.add('wake'); else b.classList.add('live');
+    }
+    this.renderPills();
+  },
+
+  /* ---------- pills ---------- */
+  renderPills(){
+    const v=$('#pillVoice'), br=$('#pillBrain'), net=$('#pillNet'), p=$('#pillPerm');
+    if(v){
+      v.className='pill '+(Voice.listening?'on':(Voice.supported?'':'off'));
+      v.innerHTML=`<i></i>${Voice.listening?(Voice.mode==='wake'?'WAKE ARMED':'LISTENING'):(Voice.supported?'VOICE':'NO MIC')}`;
+    }
+    if(br){
+      const hybrid=!!S.profile.llm.apiKey;
+      br.className='pill '+(hybrid?'on':'');
+      br.innerHTML=`<i></i>${hybrid?'HYBRID':'LOCAL'}`;
+    }
+    if(net){
+      net.className='pill '+(navigator.onLine?'on':'off');
+      net.innerHTML=`<i></i>${navigator.onLine?'ONLINE':'OFFLINE'}`;
+    }
+    if(p){
+      const total=Object.keys(PERM_META).length;
+      const granted=Object.keys(PERM_META).filter(k=>PermissionManager.isAllowed(k)).length;
+      p.className='pill '+(granted>0?'on':'warn');
+      p.innerHTML=`<i></i>${granted}/${total} PERMS`;
+    }
+  },
+
+  /* ---------- left panels ---------- */
+  renderModules(){
+    const mods=[
+      {n:'VOICE',        s: Voice.supported?'on':'off'},
+      {n:'WAKE WORD',    s: S.profile.wakeWordEnabled?'on':'standby'},
+      {n:'BRAIN',        s:'on'},
+      {n:'TOOLS',        s:'on'},
+      {n:'PRODUCTIVITY', s:'on'},
+      {n:'AUTOMATION',   s: PermissionManager.isAllowed('automation')?'on':'off'},
+      {n:'VISION',       s: PermissionManager.isAllowed('camera')?'on':'standby'},
+      {n:'WEB',          s: PermissionManager.isAllowed('web')?'on':'off'},
+      {n:'NATIVE SHELL', s: Bridge.available?'on':'off'},
+      {n:'SETTINGS',     s:'on'}
+    ];
+    $('#modules').innerHTML=mods.map(m=>`
+      <div class="module ${m.s}">
+        <span class="dot"></span>
+        <span class="nm">${m.n}</span>
+        <span class="st">${m.s==='on'?'ACTIVE':m.s==='standby'?'STANDBY':'OFF'}</span>
+      </div>`).join('');
+  },
+
+  renderQuick(){
+    const qs=[
+      {l:'Status report', v:'status report'},
+      {l:'Open YouTube', v:'open youtube'},
+      {l:'Weather — Delhi', v:'weather in Delhi'},
+      {l:'Start study mode', v:'start study mode'},
+      {l:'Good morning', v:'good morning'},
+      {l:'10 minute timer', v:'set a 10 minute timer'},
+      {l:'Show my tasks', v:'show tasks'},
+      {l:'What can you do?', v:'help'}
+    ];
+    $('#quickList').innerHTML=qs.map(q=>`<button class="qbtn" data-cmd="${esc(q.v)}">${esc(q.l)}</button>`).join('');
+    $$('#quickList .qbtn').forEach(b=>b.onclick=()=>{
+      Brain.process(b.dataset.cmd);
+      if(window.innerWidth<=1180) this.closeDrawers();
+    });
+  },
+
+  renderChips(){
+    const chips=[
+      'status report','open youtube','mausam batao Delhi','set a 5 minute timer',
+      'add task submit project report','show tasks','note down buy groceries',
+      'calculate 1450 * 12','help'
+    ];
+    $('#chips').innerHTML=chips.map(c=>`<button class="chip" data-cmd="${esc(c)}">${esc(c)}</button>`).join('');
+    $$('#chips .chip').forEach(b=>b.onclick=()=>Brain.process(b.dataset.cmd));
+  },
+
+  renderSysInfo(){
+    const el=$('#sysInfo');
+    if(!el) return;
+    const tz=S.profile.timezone;
+    el.innerHTML=`
+      <div class="kv"><span>Assistant</span><b>ROBERT v1.0</b></div>
+      <div class="kv"><span>Owner</span><b>${esc(S.profile.name)}</b></div>
+      <div class="kv"><span>Language</span><b>${esc(S.profile.language)}</b></div>
+      <div class="kv"><span>Timezone</span><b>${esc(tz)}</b></div>
+      <div class="kv"><span>Voice engine</span><b>${Voice.supported?'Web Speech':'Unavailable'}</b></div>
+      <div class="kv"><span>Native shell</span><b>${Bridge.available?'Linked':'Not installed'}</b></div>
+      <div class="kv"><span>Tools</span><b>${Tools.list().length}</b></div>`;
+  },
+
+  /* ---------- right panel ---------- */
+  renderLogsIfVisible(){ if(this.tab==='logs' && $('#tabBody')) this.renderTab(); },
+
+  renderTab(){
+    const body=$('#tabBody'); if(!body) return;
+    const fn={profile:this.renderProfile, perms:this.renderPerms, data:this.renderData, auto:this.renderAuto, logs:this.renderLogs}[this.tab];
+    body.innerHTML = fn? fn.call(this) : '';
+    if(this.tab==='profile') this.fillVoiceSelect();
+  },
+
+  renderProfile(){
+    const p=S.profile;
+    const voiceOpts=(Voice.voices||[]).map(v=>`<option value="${esc(v.name)}" ${v.name===p.voice.name?'selected':''}>${esc(v.name)} · ${esc(v.lang)}</option>`).join('');
+    return `
+      <div class="card-title">User Profile</div>
+      <div class="field"><label>Preferred name</label>
+        <input type="text" data-bind="profile.name" value="${esc(p.name)}" placeholder="Boss">
+      </div>
+      <div class="field"><label>Preferred language</label>
+        <select data-bind="profile.language">
+          <option value="hinglish" ${p.language==='hinglish'?'selected':''}>Hinglish (recommended)</option>
+          <option value="english" ${p.language==='english'?'selected':''}>English</option>
+          <option value="hindi" ${p.language==='hindi'?'selected':''}>हिन्दी</option>
+        </select>
+      </div>
+      <div class="field"><label>Personality</label>
+        <select data-bind="profile.personality">
+          <option value="jarvis" ${p.personality==='jarvis'?'selected':''}>JARVIS — calm & concise</option>
+          <option value="friendly" ${p.personality==='friendly'?'selected':''}>Friendly & warm</option>
+          <option value="formal" ${p.personality==='formal'?'selected':''}>Formal & professional</option>
+          <option value="minimal" ${p.personality==='minimal'?'selected':''}>Minimal — answers only</option>
+        </select>
+      </div>
+
+      <div class="card-title" style="margin-top:16px">Voice</div>
+      <div class="toggle-row">
+        <div class="tl"><b>Voice output</b><span>Speak every reply aloud</span></div>
+        <label class="switch"><input type="checkbox" data-bind="profile.voice.enabled" ${p.voice.enabled?'checked':''}><span class="sl"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="tl"><b>Wake word listening</b><span>Always-on “${esc(p.wakeWord)}” detection</span></div>
+        <label class="switch"><input type="checkbox" data-bind="profile.wakeWordEnabled" ${p.wakeWordEnabled?'checked':''}><span class="sl"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="tl"><b>Continuous conversation</b><span>Stay awake — no need to repeat the wake word</span></div>
+        <label class="switch"><input type="checkbox" data-bind="profile.continuous" ${p.continuous?'checked':''}><span class="sl"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="tl"><b>Proactive mode</b><span>Surface reminders and next steps unprompted</span></div>
+        <label class="switch"><input type="checkbox" data-bind="profile.proactive" ${p.proactive?'checked':''}><span class="sl"></span></label>
+      </div>
+      <div class="field" style="margin-top:12px"><label>Wake word</label>
+        <input type="text" data-bind="profile.wakeWord" value="${esc(p.wakeWord)}" placeholder="robert">
+      </div>
+      <div class="field"><label>Voice <span class="range-val">${(Voice.voices||[]).length} found</span></label>
+        <select id="voiceSelect" data-bind="profile.voice.name">
+          <option value="">System default</option>${voiceOpts}
+        </select>
+      </div>
+      <div class="field"><label>Speed <span class="range-val" id="rvRate">${p.voice.rate}</span></label>
+        <input type="range" min="0.5" max="2" step="0.05" data-bind="profile.voice.rate" value="${p.voice.rate}">
+      </div>
+      <div class="field"><label>Pitch <span class="range-val" id="rvPitch">${p.voice.pitch}</span></label>
+        <input type="range" min="0" max="2" step="0.05" data-bind="profile.voice.pitch" value="${p.voice.pitch}">
+      </div>
+      <div class="field"><label>Volume <span class="range-val" id="rvVol">${p.voice.volume}</span></label>
+        <input type="range" min="0" max="1" step="0.05" data-bind="profile.voice.volume" value="${p.voice.volume}">
+      </div>
+      <div class="field"><label>Speech input language</label>
+        <select data-bind="profile.sttLang">
+          ${['en-IN','en-US','hi-IN','en-GB'].map(l=>`<option value="${l}" ${p.sttLang===l?'selected':''}>${l}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="card-title" style="margin-top:16px">Cloud Brain (optional)</div>
+      <div class="field"><label>API key</label>
+        <input type="password" data-bind="profile.llm.apiKey" value="${esc(p.llm.apiKey)}" placeholder="sk-… (stored locally only)">
+      </div>
+      <div class="field"><label>Model</label>
+        <input type="text" data-bind="profile.llm.model" value="${esc(p.llm.model)}" placeholder="gpt-4o-mini">
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" data-act="testVoice">Test voice</button>
+        <button class="btn ghost" data-act="resetAll">Reset all data</button>
+      </div>`;
+  },
+
+  fillVoiceSelect(){
+    const sel=$('#voiceSelect'); if(!sel) return;
+    const cur=S.profile.voice.name;
+    sel.innerHTML=`<option value="">System default</option>`+
+      (Voice.voices||[]).map(v=>`<option value="${esc(v.name)}" ${v.name===cur?'selected':''}>${esc(v.name)} · ${esc(v.lang)}</option>`).join('');
+  },
+
+  renderPerms(){
+    const rows=Object.keys(PERM_META).map(k=>{
+      const lvl=PermissionManager.level(k);
+      const meta=PERM_META[k];
+      return `
+      <div class="perm">
+        <div class="perm-h"><b>${esc(meta.label)}</b><code>${esc(k)}</code></div>
+        <p>${esc(meta.desc)}</p>
+        <div class="seg" data-perm="${k}">
+          <button class="allow ${lvl==='allow'?'active':''}" data-lvl="allow">Allow</button>
+          <button class="ask ${lvl==='ask'?'active':''}" data-lvl="ask">Ask</button>
+          <button class="deny ${lvl==='deny'?'active':''}" data-lvl="deny">Deny</button>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="card-title">Permission Manager</div>
+      <p style="font-size:11px;color:#4a5f76;margin-bottom:10px;line-height:1.5">
+        Every sensitive action passes through this gate. “Ask” prompts you before each use; “Deny” blocks the module entirely.
+      </p>${rows}
+      <div class="btn-row">
+        <button class="btn ghost" data-act="permAllAllow">Allow all</button>
+        <button class="btn danger" data-act="permAllDeny">Deny all</button>
+      </div>`;
+  },
+
+  renderData(){
+    const tasks=S.memory.tasks;
+    const rems=S.memory.reminders.filter(r=>!r.fired).sort((a,b)=>a.at-b.at);
+    const notes=S.memory.notes;
+    const taskHTML= tasks.length? tasks.map((x,i)=>`
+      <div class="item ${x.done?'done':''}">
+        <div class="ck" data-task-toggle="${x.id}">✓</div>
+        <div class="body"><b>${esc(x.text)}</b><span>${x.done?'completed':'pending'} · #${i+1}</span></div>
+        <button class="x" data-task-del="${x.id}">×</button>
+      </div>`).join('') : `<div class="empty">No tasks yet.<br>Say “add task …”</div>`;
+
+    const remHTML= rems.length? rems.map(r=>`
+      <div class="item">
+        <div class="body"><b>${esc(r.text)}</b><span>${new Date(r.at).toLocaleString([],{weekday:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
+        <button class="x" data-rem-del="${r.id}">×</button>
+      </div>`).join('') : `<div class="empty">No active reminders.</div>`;
+
+    const noteHTML= notes.length? notes.map(n=>`
+      <div class="item">
+        <div class="body"><b>${esc(n.text)}</b><span>${new Date(n.ts).toLocaleString([],{hour:'2-digit',minute:'2-digit'})}</span></div>
+        <button class="x" data-note-del="${n.id}">×</button>
+      </div>`).join('') : `<div class="empty">No notes yet.<br>Say “note down …”</div>`;
+
+    return `
+      <div class="card-title">Tasks (${tasks.filter(x=>!x.done).length} pending)</div>
+      ${taskHTML}
+      <div class="card-title" style="margin-top:16px">Reminders (${rems.length})</div>
+      ${remHTML}
+      <div class="card-title" style="margin-top:16px">Notes (${notes.length})</div>
+      ${noteHTML}`;
+  },
+
+  renderAuto(){
+    const cmdRows=S.memory.customCommands.length? S.memory.customCommands.map(c=>`
+      <div class="item">
+        <div class="body"><b>“${esc(c.trigger)}”</b><span>→ ${esc(c.response)}</span></div>
+        <button class="x" data-cmd-del="${c.id}">×</button>
+      </div>`).join('') : `<div class="empty">No custom commands yet.</div>`;
+
+    const routines=this.defaultRoutines();
+    const routineRows=routines.map(r=>`
+      <div class="item">
+        <div class="body"><b>${esc(r.name)}</b><span>trigger: “${esc(r.trigger)}” · ${r.actions.length} step(s)</span></div>
+        <button class="x" data-run-routine="${esc(r.trigger)}" title="Run">▸</button>
+      </div>`).join('');
+
+    const actionOpts=Object.keys(ROUTINE_ACTIONS).map(k=>`<option value="${k}">${esc(ROUTINE_ACTIONS[k].label)}</option>`).join('');
+
+    return `
+      <div class="card-title">Custom Commands</div>
+      <div class="field"><label>Trigger phrase</label><input type="text" id="ccTrigger" placeholder="good morning boss"></div>
+      <div class="field"><label>ROBERT's response</label><textarea id="ccResponse" placeholder="Good morning! Aaj ka plan banaate hain."></textarea></div>
+      <button class="btn full" data-act="addCustom">Add command</button>
+      <div style="margin-top:10px">${cmdRows}</div>
+
+      <div class="card-title" style="margin-top:18px">Built-in Routines</div>
+      ${routineRows}
+
+      <div class="card-title" style="margin-top:18px">Build a Routine</div>
+      <div class="field"><label>Routine name</label><input type="text" id="rtName" placeholder="Deep Work"></div>
+      <div class="field"><label>Trigger phrase</label><input type="text" id="rtTrigger" placeholder="start deep work"></div>
+      <div class="field"><label>Steps (hold Ctrl / Cmd to multi-select)</label>
+        <select id="rtActions" multiple size="6" style="min-height:120px">${actionOpts}</select>
+      </div>
+      <button class="btn full" data-act="addRoutine">Create routine</button>
+      ${S.memory.routines.length? `<div style="margin-top:10px">${S.memory.routines.map(r=>`
+        <div class="item">
+          <div class="body"><b>${esc(r.name)}</b><span>trigger: “${esc(r.trigger)}” · ${r.actions.length} step(s)</span></div>
+          <button class="x" data-rt-del="${r.id}">×</button>
+        </div>`).join('')}</div>`:''}`;
+  },
+
+  defaultRoutines(){
+    const userBuilt=S.memory.routines.map(r=>({name:r.name, trigger:r.trigger, actions:r.actions, user:true}));
+    const built=[
+      {name:'Good Morning', trigger:'good morning', actions:['greeting','weather','tasks','openCalendar']},
+      {name:'Study Mode',   trigger:'start study mode', actions:['greeting','focusTimer','music']},
+      {name:'Work Mode',    trigger:'work mode', actions:['openMail','openCalendar','tasks']},
+      {name:'Night Mode',   trigger:'night mode', actions:['agenda','nightMode']}
+    ];
+    return built.concat(userBuilt);
+  },
+
+  renderLogs(){
+    if(!S.logs.length) return `<div class="card-title">Activity Log</div><div class="empty">No activity recorded yet.</div>`;
+    const rows=S.logs.slice(0,80).map(l=>{
+      const time=new Date(l.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      return `<div class="log ${esc(l.type)}"><span class="ts">${time}</span>${esc(l.msg)}</div>`;
+    }).join('');
+    return `<div class="card-title">Activity Log (${S.logs.length})</div>${rows}
+      <div class="btn-row"><button class="btn ghost full" data-act="clearLogs">Clear log</button></div>`;
+  },
+
+  /* ---------- field binding ---------- */
+  onField(e){
+    const el=e.target;
+    const bind=el.dataset.bind;
+    if(bind){
+      let val = el.type==='checkbox' ? el.checked : el.value;
+      if(el.type==='range'||el.type==='number') val=Number(val);
+      setPath(S,bind,val);
+      save();
+      const rv={ 'profile.voice.rate':'rvRate','profile.voice.pitch':'rvPitch','profile.voice.volume':'rvVol' }[bind];
+      if(rv){ const n=$('#'+rv); if(n) n.textContent=val; }
+      if(bind==='profile.wakeWordEnabled'){
+        if(val){ Voice.start('wake'); } else { Voice.stop(); }
+      }
+      if(bind==='profile.wakeWord'){ this.renderChips(); }
+      if(bind==='profile.language'){ if(Voice.rec) Voice.rec.lang=Voice.recLang(); }
+      if(bind==='profile.name'){ this.renderSysInfo(); }
+      this.renderPills(); this.renderModules();
+    }
+    /* custom textarea id captures handled on click */
+  },
+
+  onClick(e){
+    const b=e.target.closest('button');
+    if(!b) return;
+    const permKey=b.closest('[data-perm]');
+    if(permKey){
+      const k=permKey.dataset.perm;
+      S.permissions[k].level=b.dataset.lvl; save();
+      Log.add('perm',`${k} set to ${b.dataset.lvl}`);
+      this.renderTab(); this.renderPills(); this.renderModules(); this.renderSysInfo();
+      return;
+    }
+    const taskToggle=b.dataset.taskToggle;
+    if(taskToggle){
+      const task=S.memory.tasks.find(x=>x.id===taskToggle);
+      if(task){ task.done=!task.done; save(); this.renderTab(); }
+      return;
+    }
+    const taskDel=b.dataset.taskDel;
+    if(taskDel){ S.memory.tasks=S.memory.tasks.filter(x=>x.id!==taskDel); save(); this.renderTab(); return; }
+    const remDel=b.dataset.remDel;
+    if(remDel){ S.memory.reminders=S.memory.reminders.filter(x=>x.id!==remDel); save(); this.renderTab(); return; }
+    const noteDel=b.dataset.noteDel;
+    if(noteDel){ S.memory.notes=S.memory.notes.filter(x=>x.id!==noteDel); save(); this.renderTab(); return; }
+    const cmdDel=b.dataset.cmdDel;
+    if(cmdDel){ S.memory.customCommands=S.memory.customCommands.filter(x=>x.id!==cmdDel); save(); this.renderTab(); return; }
+    const rtDel=b.dataset.rtDel;
+    if(rtDel){ S.memory.routines=S.memory.routines.filter(x=>x.id!==rtDel); save(); this.renderTab(); return; }
+    const runRt=b.dataset.runRoutine;
+    if(runRt){
+      const r=this.defaultRoutines().find(x=>x.trigger===runRt);
+      if(r) Automation.runRoutine({name:r.name, actions:r.actions});
+      return;
+    }
+
+    switch(b.dataset.act){
+      case 'testVoice':
+        Voice.speak(t({hi_en:`Namaste ${S.profile.name}, main ROBERT hoon. Aapka personal assistant.`,en:`Hello ${S.profile.name}, I am ROBERT, your personal assistant.`,hi:`नमस्ते ${S.profile.name}, मैं ROBERT हूँ।`}));
+        break;
+      case 'resetAll':
+        Modal.confirm({tag:'Danger zone',title:'Reset everything?',body:'This wipes your profile, permissions, tasks, notes, reminders, routines and logs from this browser. This cannot be undone.',ok:'Erase all data',danger:true})
+          .then(ok=>{ if(ok){ localStorage.removeItem(STORE_KEY); location.reload(); } });
+        break;
+      case 'permAllAllow':
+        Object.keys(PERM_META).forEach(k=>S.permissions[k].level='allow'); save(); this.renderTab(); this.renderPills(); this.renderModules();
+        break;
+      case 'permAllDeny':
+        Object.keys(PERM_META).forEach(k=>S.permissions[k].level='deny'); save(); this.renderTab(); this.renderPills(); this.renderModules(); Voice.stop();
+        break;
+      case 'clearLogs':
+        S.logs=[]; save(); this.renderTab(); break;
+      case 'addCustom':{
+        const trig=$('#ccTrigger'), resp=$('#ccResponse');
+        if(!trig.value.trim()||!resp.value.trim()){ Modal.alert({title:'Missing fields',body:'Please provide both a trigger phrase and a response.'}); return; }
+        S.memory.customCommands.push({id:uid(), trigger:trig.value.trim(), response:resp.value.trim()});
+        save(); Log.add('system','Custom command added: '+trig.value.trim()); this.renderTab();
+        UI.addMessage('system',`Custom command registered · “${esc(trig.value.trim())}”`);
+        break;
+      }
+      case 'addRoutine':{
+        const nm=$('#rtName').value.trim();
+        const tr=$('#rtTrigger').value.trim();
+        const acts=Array.from($('#rtActions').selectedOptions).map(o=>o.value);
+        if(!nm||!tr||!acts.length){ Modal.alert({title:'Incomplete routine',body:'Provide a name, a trigger phrase and at least one step.'}); return; }
+        S.memory.routines.push({id:uid(), name:nm, trigger:tr, actions:acts});
+        save(); Log.add('system','Routine created: '+nm); this.renderTab();
+        UI.addMessage('system',`Routine registered · “${esc(tr)}” → ${acts.length} step(s)`);
+        break;
+      }
+    }
+  }
+};
+
+/* ========================= 14. BOOT ========================= */
+async function boot(){
+  Modal.init();
+  UI.init();
+  Voice.init();
+  Scheduler.init();
+  Proactive.start();
+  Notify.request().then(ok=>{ if(ok && PermissionManager.level('notifications')==='ask'){ /* keep ask */ } });
+
+  UI.addMessage('system','ROBERT core online · modules loading…');
+  await sleep(260);
+  UI.addMessage('system',`VOICE ${Voice.supported?'✓ ready':'✗ unsupported in this browser'} · BRAIN ✓ · TOOLS ✓ (${Tools.list().length} registered)`);
+  await sleep(240);
+  UI.addMessage('system',`PERMISSIONS · ${Object.keys(PERM_META).filter(k=>PermissionManager.isAllowed(k)).length}/${Object.keys(PERM_META).length} granted · NATIVE SHELL ${Bridge.available?'✓ linked':'— not installed'}`);
+  await sleep(300);
+
+  Log.add('system','ROBERT booted');
+
+  if(S.profile.greetOnStart){
+    const h=new Date().getHours();
+    const greet = h<12 ? t({hi_en:'Good morning',en:'Good morning',hi:'सुप्रभात'})
+                : h<17 ? t({hi_en:'Good afternoon',en:'Good afternoon',hi:'नमस्कार'})
+                : t({hi_en:'Good evening',en:'Good evening',hi:'शुभ संध्या'});
+    const msg = `${greet}, <b>${esc(S.profile.name)}</b>. ROBERT ${t({hi_en:'aapki seva mein taiyaar hai.',en:'is ready to assist.',hi:'आपकी सेवा में तैयार है।'})}<br><br>`+
+      t({
+        hi_en:'Mic button dabaayein ya “Hey Robert” boliye. Neeche kuch quick commands bhi diye hain.',
+        en:'Tap the mic button or say “Hey Robert”. A few quick commands are listed below.',
+        hi:'माइक बटन दबाएँ या “Hey Robert” कहें।'
+      });
+    UI.say(msg);
+  }
+
+  UI.renderTab();
+  UI.renderSysInfo();
+  UI.renderPills();
+
+  window.addEventListener('online',()=>UI.renderPills());
+  window.addEventListener('offline',()=>UI.renderPills());
+  window.addEventListener('beforeunload',()=>{ saveNow(); Voice.close && Vision.close(); });
+}
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
+else boot();
+
+})();
+</script>
+</body>
+</html>
